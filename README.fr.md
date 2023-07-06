@@ -1,7 +1,7 @@
 [![en](https://img.shields.io/badge/language-english-red)](./README.md)
 [![fr](https://img.shields.io/badge/langue-français-brightgreen)](./README.fr.md)
 
-#Oumont Quizz
+# Oumont Quizz
 
 ## Description
 
@@ -18,17 +18,17 @@ Les questions qui seront posées au cours de la partie devront être contenues d
 - `question` : La question
 - `answer` : La réponse correcte à la question
 - `points` : Le nombre de points que vaut la question
-- `choices` : Les 4 choix possibles pour la question si c'est une question à choix multiples (séparés par des /)
+- `choices` : Les 4 choix possibles pour la question si c'est une question à choix multiples (séparés par des `/`)
 - `explanation` : Une explication sur la réponse (optionnelle)
 - `isBonus` : Indique si la question est une question bonus (0 = non, 1 = oui). Si une question est une question bonus, elle ne sera pas comptabilisée dans le score final, mais permettra de faire gagner des avantages au cours de la partie
 
-Voici un exemple de fichier :
+Voici un exemple de fichier valide :
 
 ```csv
 questionType;theme;question;answer;points;choices;explanation;isBonus
-multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;0
+multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;0
 open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;0
-estimate;Espace;A combien de kilomètres se trouve la lune ?;384400;1;;La lune se trouve à 384400 km de la terre;0
+estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;0
 multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;1
 ```
 
@@ -75,9 +75,30 @@ Les 4 groupes ayant obtenu le plus de points sont qualifiés pour les demi-final
 
 ### Etape finale
 
-## Calcul des points pour l'étape de qualification
+#### Demi-finales
 
-Les groupes répondent sur une feuille de réponse qui sera récupérée par l'animateur entre chaque question avant que la réponse ne soit donnée.
-A la fin de l'étape de qualification, une pause est faite pour que l'animateur puisse saisir les réponses des groupes dans l'application.
+Les 4 groupes qualifiés sont répartis en 2 demi-finales. Le groupe ayant fini premier de l'étape de qualification affrontera le groupe ayant fini quatrième et le groupe ayant fini deuxième affrontera le groupe ayant fini troisième.
+Le format des demi-finales reste à déterminer.
 
-##
+#### Petite finale
+
+Les 2 groupes ayant obtenu le moins de points pendant les demi-finales s'affrontent pour déterminer la 3ème et 4ème place.
+Le format de la petite finale reste à déterminer.
+
+#### Finale
+
+Les 2 groupes ayant obtenu le plus de points pendant les demi-finales s'affrontent pour déterminer la 1ère et 2ème place.
+Le format de la finale reste à déterminer.
+
+## Avantages
+
+Les avantages sont des bonus que les groupes peuvent obtenir en répondant correctement à une question bonus. Ils peuvent être utilisés pendant l'étape de qualification.
+Les avantages disponibles sont les suivants :
+
+| Avantage  | Description                                                                                                                                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `joker1`  | Le groupe peut choisir de gagner deux fois le nombre de points qu'ils peuvent obtenir à la prochaine question en répondant correctement. S'ils répondent mal, ils ne perdent pas et ne gagnent pas de points. |
+| `joker2`  | Le groupe peut choisir de retirer 1 point à une autre équipe.                                                                                                                                                 |
+| `joker3`  | Le groupe peut décider de répondre 2 fois à une question. Une seule réponse correcte sera acceptée.                                                                                                           |
+
+D'autres jokers seront peut être ajoutés dans le futur.
