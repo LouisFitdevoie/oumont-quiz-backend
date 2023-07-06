@@ -14,12 +14,12 @@ Function: select a random group from the list of groups, each time a group is se
 3) Show questions and themes imported to the game for the user to verify if everything is ok
 4) Save questions and themes to the db
 5) Ask user how many questions will be asked for the qualifying round
-6) Ask user which theme will be used for the questions that are asked to get a bonus power during the quelifying round (bonus power TBD)
+6) Ask user which theme will be used for the questions that are asked to get a bonus power during the qualifying round (bonus power TBD)
 7) Ask user how many questions will be asked during the winner bracket semi-final
 8) Ask user how many questions will be asked during the winner bracket loser final
 9) Ask user how many questions will be asked during the winner bracket final
 10) Ask user when are the bonus questions asked (frequency or random?)
-11) Ask user how long the groups have to answer the questions -> different type of questions have different time to answer (Default: MCQ -> 5s; Open question -> 10s; Bonus question -> 10s)
+11) Ask user how long the groups have to answer the questions -> different type of questions have different time to answer (Default: MCQ -> 5s; Estimate -> 10s; Open question -> 10s; Bonus question -> 10s)
 12) Ask user how many persons per group (default = 4)
 13) Ask user to add the names of the groups that will participate at the event
 13) Ask user to start the game
