@@ -70,7 +70,7 @@ Une fois que le nombre de questions défini par l'animateur pour l'étape de qua
 A la suite de l'étape de qualification, l'animateur doit saisir les réponses de chaque groupe dans l'application.
 Pour les questions à choix multiples et les questions ouvertes, il devra simplement spécifier si le groupe a répondu correctement ou non.
 Pour les questions d'estimation, il devra saisir la réponse donnée par le groupe et l'ordinateur calculera le nombre de points que le groupe a obtenu en fonction de la réponse donnée et de la réponse correcte.
-Une fois que toutes les réponses ont été saisies, l'ordinateur calcule le score de chaque groupe et affiche le classement des groupes en fonction de leur score sous la forme d'un diagramme en bâtonnets horizontal.
+Une fois que toutes les réponses ont été saisies, l'ordinateur calcule le score de chaque groupe et affiche le classement des groupes sous la forme d'un diagramme en bâtonnets horizontal.
 Les 4 groupes ayant obtenu le plus de points sont qualifiés pour les demi-finales.
 
 ### Etape finale
@@ -101,4 +101,4 @@ Les avantages disponibles sont les suivants :
 | `joker2`  | Le groupe peut choisir de retirer 1 point à une autre équipe.                                                                                                                                                 |
 | `joker3`  | Le groupe peut décider de répondre 2 fois à une question. Une seule réponse correcte sera acceptée.                                                                                                           |
 
-D'autres jokers seront peut être ajoutés dans le futur.
+D'autres avantages seront peut être ajoutés dans le futur.

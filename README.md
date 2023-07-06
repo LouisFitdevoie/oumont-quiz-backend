@@ -56,3 +56,49 @@ When the host creates a new game, he or she must follow several steps:
 10. Enter the names of the groups who will take part in the game.
 
 Once all these steps have been completed, the host can click on the `Start Game` button to launch the game and start the qualifying round.
+
+### Qualifying round
+
+Each question, a random group will be selected by the computer to choose the theme of the next question. When a group is selected, he won't be able to choose the theme of another question while all the other groups haven't been selected once.
+After the group has selected the theme, a random question will be selected to be asked to all the groups. They will answer to the question on a sheet of paper and it will be collected by the host between each questions before the answer is revealed.
+For the bonus questions, if the host choose to include them for the game, 1 group will be randomly selected to answer the question. If the group answer correctly, they will earn an advantage (see _Advantages_). If they answer incorrectly, nothing will happen.
+In all cases, each question asked once won't be asked again during the game.
+Once the number of questions chosen by the host for the qualifying round has been reached (without couting the bonus questions), the qualifying round is over.
+
+### Points calculation for the qualifying round
+
+After the qualifying round, the host has to enter the answers of each group inside the application.
+For the multiple choice questions and the open questions, the host only has to specify if the answer is correct or not.
+For the estimate questions, the host has to enter the answer given by the group and the computer will calculate the points earned by the group depending on the answer given and the correct answer.
+Once all the answers have been entered, the computer will calculate the points of every group and display the ranking of the qualifying round in the form of a horizontal bar chart.
+The 4 groups that have earned the most points will be qualified for the semi-finals.
+
+### Final rounds
+
+#### Semi-finals
+
+The 4 groups qualified are split into 2 semi-finals. The group that finished first in the qualifying round will face the group that finished fourth and the group that finished second will face the group that finished third.
+This round organization is still to be determined.
+
+#### Small final
+
+The 2 groups that lost their semi-final will face each other in the small final. The winner of this round will finish third.
+This round organization is still to be determined.
+
+#### Final
+
+The 2 groups that won their semi-final will face each other in the final. The winner of this round will finish first and the loser will finish second.
+This round organization is still to be determined.
+
+## Advantages
+
+The advantages are bonuses that the groups can earn by correctly answering a bonus question. They can be used during the qualifying round.
+The available advantages are the following:
+
+| Advantage | Description                                                                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `joker1`  | The group can earn twice the amount of points for the next question by answering correctly. If they answer incorrectly, they won't lose or win any point. |
+| `joker2`  | The group can remove 1 point to another group.                                                                                                            |
+| `joker3`  | The group can answer twice to a question. Only one correct answer will be accepted.                                                                       |
+
+Other advantages may be added in the future.
