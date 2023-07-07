@@ -2,7 +2,7 @@ const uuid = require("uuid");
 
 class Question {
   // Create a question from a line of the question file
-  constructor(fileLine) {
+  constructor(fileLine, gameId) {
     const line = fileLine.split(";");
     this.id = uuid.v4();
     this.questionType = line[0];
@@ -13,6 +13,7 @@ class Question {
     this.choices = line[5].split("/");
     this.explanation = line[6];
     this.isBonus = new Boolean(line[7]);
+    this.gameId = gameId;
   }
 }
 
@@ -32,7 +33,7 @@ fs.readFile("./src/test.csv", "utf8", (err, data) => {
   }
   const fileContent = data.split("\n").slice(1);
   fileContent.forEach((line) => {
-    questions.push(new Question(line));
+    questions.push(new Question(line, game.id));
   });
 });
 
