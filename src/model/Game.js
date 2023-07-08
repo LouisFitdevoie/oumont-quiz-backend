@@ -24,7 +24,7 @@ class Game {
     timeToAnswer.forEach((time) => {
       time = parseInt(time);
     });
-    this.timeToAnswer = timeToAnswer;
+    this.timeToAnswer = timeToAnswer; // For the DB, it will be a string like "10,15,20"
     this.personsPerGroup = parseInt(personsPerGroup);
   }
 }

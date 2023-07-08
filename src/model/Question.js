@@ -10,7 +10,7 @@ class Question {
     this.question = line[2];
     this.answer = line[3];
     this.points = parseInt(line[4]);
-    this.choices = line[5].split("/");
+    this.choices = line[5].split("/"); // For the DB, it will be a string like "1/2/3/4"
     this.explanation = line[6];
     this.isBonus = new Boolean(line[7]);
     this.gameId = gameId;
