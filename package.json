@@ -4,8 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./src/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=production node ./server.js",
+    "start:dev": "NODE_ENV=development node ./server.js",
+    "test": "NODE_ENV=testing mocha src/test/**/*.js --exit --recursive --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,14 @@
   },
   "homepage": "https://github.com/LouisFitdevoie/oumont-quizz#readme",
   "dependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
+    "husky": "^8.0.3",
+    "mocha": "^10.2.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22",
     "uuid": "^9.0.0"
