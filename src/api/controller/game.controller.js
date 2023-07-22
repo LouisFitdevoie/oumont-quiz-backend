@@ -204,7 +204,7 @@ exports.createGame = (req, res) => {
         return;
       } else {
         res.status(201).send({
-          message: "Game successully created",
+          message: "Game successfully created",
         });
       }
     }

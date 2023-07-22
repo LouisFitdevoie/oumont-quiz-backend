@@ -392,30 +392,27 @@ describe("POST /game", () => {
       });
   });
 
-  //***** BUGGED *****/
-  //* Return that no database is selected
-
-  // it("should return a success message if the game is created", (done) => {
-  //   chai
-  //     .request(serverAddress)
-  //     .post(baseURL + "/game")
-  //     .send({
-  //       name: "Test",
-  //       qualifyingNumberQuestions: 10,
-  //       bonusQuestions: false,
-  //       semiFinalsNumberQuestions: 10,
-  //       smallFinalNumberQuestions: 10,
-  //       finalNumberQuestions: 10,
-  //       timeToAnswerQCM: 10,
-  //       timeToAnswerOpen: 10,
-  //       timeToAnswerEstimate: 10,
-  //     })
-  //     .end((err, res) => {
-  //       res.should.have.status(201);
-  //       res.body.should.have
-  //         .property("message")
-  //         .eql("Game successfully created");
-  //       done();
-  //     });
-  // });
+  it("should return a success message if the game is created", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/game")
+      .send({
+        name: "Test",
+        qualifyingNumberQuestions: 10,
+        bonusQuestions: false,
+        semiFinalsNumberQuestions: 10,
+        smallFinalNumberQuestions: 10,
+        finalNumberQuestions: 10,
+        timeToAnswerQCM: 10,
+        timeToAnswerOpen: 10,
+        timeToAnswerEstimate: 10,
+      })
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.have
+          .property("message")
+          .eql("Game successfully created");
+        done();
+      });
+  });
 });
