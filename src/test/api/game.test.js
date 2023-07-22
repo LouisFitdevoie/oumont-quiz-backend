@@ -15,6 +15,19 @@ const baseURL = `/api/${process.env.API_VERSION}`;
 
 let gameId = "";
 
+describe("GET /games without game in the DB", () => {
+  it("should return an error message if there is no game in the DB", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/games")
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("error").eql("No game found");
+        done();
+      });
+  });
+});
+
 describe("POST /game", () => {
   it("should return an error message if the name is missing", (done) => {
     chai
@@ -465,4 +478,46 @@ describe("GET /game/:gameId", () => {
         done();
       });
   });
+});
+
+describe("GET /games after adding a game in the DB", () => {
+  it("should return an array with one game", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/games")
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("games");
+        res.body.games.should.be.a("array");
+        res.body.games.length.should.be.eql(1);
+        res.body.games[0].should.have.property("gameId").eql(gameId);
+        res.body.games[0].should.have.property("name").eql("Test");
+        res.body.games[0].should.have.property("createdAt").not.eql(null);
+        done();
+      });
+  });
+});
+
+after((done) => {
+  const database = require("../../database.js");
+  const pool = database.pool;
+  process.env.TEST_FILES_COMPLETED++;
+  if (process.env.TEST_FILES_COMPLETED == process.env.TEST_FILES_TOTAL) {
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      connection.query("DELETE FROM `Groups`", (err, result) => {
+        if (err) throw err;
+        connection.query("DELETE FROM `Questions`", (err, result) => {
+          if (err) throw err;
+          connection.query("DELETE FROM `Games`", (err, result) => {
+            if (err) throw err;
+            connection.release();
+            done();
+          });
+        });
+      });
+    });
+  } else {
+    done();
+  }
 });

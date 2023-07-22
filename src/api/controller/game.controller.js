@@ -222,39 +222,65 @@ exports.getGameById = (req, res) => {
     return;
   }
 
-  pool.query(
-    "SELECT * FROM Games WHERE id = ?",
-    [gameId],
-    (error, results, fields) => {
-      if (error) {
-        console.error(error);
-        res.status(500).send({
-          error: "Error while getting the game",
-        });
-        return;
-      } else if (results.length == 0) {
-        res.status(404).send({
-          error: "Game not found",
-        });
-        return;
-      } else {
-        res.status(200).send({
-          message: "Game successfully retrieved",
-          game: {
-            id: results[0].id,
-            name: results[0].name,
-            qualifyingNumberQuestions: results[0].qualifying_number_questions,
-            bonusQuestions: Boolean(results[0].bonus_questions),
-            bonusQuestionsNumber: results[0].bonus_questions_number,
-            semiFinalsNumberQuestions: results[0].semi_finals_number_questions,
-            smallFinalNumberQuestions: results[0].small_final_number_questions,
-            finalNumberQuestions: results[0].final_number_questions,
-            timeToAnswer: results[0].time_to_answer,
-            personsPerGroup: results[0].persons_per_group,
-            createdAt: results[0].created_at,
-          },
+  pool.query("SELECT * FROM Games WHERE id = ?", [gameId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send({
+        error: "Error while getting the game",
+      });
+      return;
+    } else if (results.length == 0) {
+      res.status(404).send({
+        error: "Game not found",
+      });
+      return;
+    } else {
+      res.status(200).send({
+        message: "Game successfully retrieved",
+        game: {
+          id: results[0].id,
+          name: results[0].name,
+          qualifyingNumberQuestions: results[0].qualifying_number_questions,
+          bonusQuestions: Boolean(results[0].bonus_questions),
+          bonusQuestionsNumber: results[0].bonus_questions_number,
+          semiFinalsNumberQuestions: results[0].semi_finals_number_questions,
+          smallFinalNumberQuestions: results[0].small_final_number_questions,
+          finalNumberQuestions: results[0].final_number_questions,
+          timeToAnswer: results[0].time_to_answer,
+          personsPerGroup: results[0].persons_per_group,
+          createdAt: results[0].created_at,
+        },
+      });
+    }
+  });
+};
+
+exports.getAllGames = (req, res) => {
+  pool.query("SELECT id, name, created_at FROM Games", (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send({
+        error: "Error while getting the games",
+      });
+      return;
+    } else if (results.length == 0) {
+      res.status(404).send({
+        error: "No game found",
+      });
+      return;
+    } else {
+      let resultArray = [];
+      for (let i = 0; i < results.length; i++) {
+        resultArray.push({
+          gameId: results[i].id,
+          name: results[i].name,
+          createdAt: results[i].created_at,
         });
       }
+      res.status(200).send({
+        message: "Games successfully retrieved",
+        games: resultArray,
+      });
     }
-  );
+  });
 };

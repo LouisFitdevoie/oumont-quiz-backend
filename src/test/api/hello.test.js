@@ -30,11 +30,11 @@ after((done) => {
   if (process.env.TEST_FILES_COMPLETED == process.env.TEST_FILES_TOTAL) {
     pool.getConnection((err, connection) => {
       if (err) throw err;
-      connection.query("DELETE FROM Groups", (err, result) => {
+      connection.query("DELETE FROM `Groups`", (err, result) => {
         if (err) throw err;
-        connection.query("DELETE FROM Questions", (err, result) => {
+        connection.query("DELETE FROM `Questions`", (err, result) => {
           if (err) throw err;
-          connection.query("DELETE FROM Games", (err, result) => {
+          connection.query("DELETE FROM `Games`", (err, result) => {
             if (err) throw err;
             connection.release();
             done();
