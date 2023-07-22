@@ -60,4 +60,8 @@ exports.startServer = () => {
   app.post(baseURL + "/game", (req, res) => {
     gameController.createGame(req, res);
   });
+
+  app.get(baseURL + "/game/:id", (req, res) => {
+    gameController.getGameById(req, res);
+  });
 };

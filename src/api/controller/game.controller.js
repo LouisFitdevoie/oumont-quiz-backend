@@ -205,6 +205,54 @@ exports.createGame = (req, res) => {
       } else {
         res.status(201).send({
           message: "Game successfully created",
+          gameId: gameToCreate.id,
+        });
+      }
+    }
+  );
+};
+
+exports.getGameById = (req, res) => {
+  const gameId = req.params.id;
+
+  if (!uuid.validate(gameId)) {
+    res.status(400).send({
+      error: "Invalid game id",
+    });
+    return;
+  }
+
+  pool.query(
+    "SELECT * FROM Games WHERE id = ?",
+    [gameId],
+    (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send({
+          error: "Error while getting the game",
+        });
+        return;
+      } else if (results.length == 0) {
+        res.status(404).send({
+          error: "Game not found",
+        });
+        return;
+      } else {
+        res.status(200).send({
+          message: "Game successfully retrieved",
+          game: {
+            id: results[0].id,
+            name: results[0].name,
+            qualifyingNumberQuestions: results[0].qualifying_number_questions,
+            bonusQuestions: Boolean(results[0].bonus_questions),
+            bonusQuestionsNumber: results[0].bonus_questions_number,
+            semiFinalsNumberQuestions: results[0].semi_finals_number_questions,
+            smallFinalNumberQuestions: results[0].small_final_number_questions,
+            finalNumberQuestions: results[0].final_number_questions,
+            timeToAnswer: results[0].time_to_answer,
+            personsPerGroup: results[0].persons_per_group,
+            createdAt: results[0].created_at,
+          },
         });
       }
     }

@@ -13,6 +13,8 @@ before(function (done) {
 const serverAddress = `${process.env.API_HOST}:${process.env.API_PORT}`;
 const baseURL = `/api/${process.env.API_VERSION}`;
 
+let gameId = "";
+
 describe("POST /game", () => {
   it("should return an error message if the name is missing", (done) => {
     chai
@@ -412,6 +414,54 @@ describe("POST /game", () => {
         res.body.should.have
           .property("message")
           .eql("Game successfully created");
+        res.body.should.have.property("gameId");
+        gameId = res.body.gameId;
+        done();
+      });
+  });
+});
+
+describe("GET /game/:gameId", () => {
+  it("should return an error message if the game ID is not a UUID", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/game/test")
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property("error").eql("Invalid game id");
+        done();
+      });
+  });
+
+  it("should return an error message if the game ID does not exist", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/game/00000000-0000-0000-0000-000000000000")
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("error").eql("Game not found");
+        done();
+      });
+  });
+
+  it("should return the game if the game ID exists", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/game/" + gameId)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("game");
+        res.body.game.should.have.property("id").eql(gameId);
+        res.body.game.should.have.property("name").eql("Test");
+        res.body.game.should.have.property("qualifyingNumberQuestions").eql(10);
+        res.body.game.should.have.property("bonusQuestions").eql(false);
+        res.body.game.should.have.property("bonusQuestionsNumber").eql(0);
+        res.body.game.should.have.property("semiFinalsNumberQuestions").eql(10);
+        res.body.game.should.have.property("smallFinalNumberQuestions").eql(10);
+        res.body.game.should.have.property("finalNumberQuestions").eql(10);
+        res.body.game.should.have.property("timeToAnswer").eql("10,10,10");
+        res.body.game.should.have.property("personsPerGroup").eql(4);
+        res.body.game.should.have.property("createdAt").not.eql(null);
         done();
       });
   });
