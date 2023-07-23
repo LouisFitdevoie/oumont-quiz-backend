@@ -8,7 +8,7 @@ exports.createGame = (req, res) => {
   const dataReceived = req.body;
   const gameToCreate = new Game("", 0, false, 0, 0, 0, 0, [0, 0, 0]);
 
-  if (dataReceived.name == undefined) {
+  if (dataReceived.hasOwnProperty("name") == false) {
     res.status(400).send({
       error: "Missing name",
     });
@@ -16,7 +16,7 @@ exports.createGame = (req, res) => {
   }
   gameToCreate.name = dataReceived.name.trim();
 
-  if (dataReceived.qualifyingNumberQuestions == undefined) {
+  if (dataReceived.hasOwnProperty("qualifyingNumberQuestions") == false) {
     res.status(400).send({
       error: "Missing the number of qualifying questions",
     });
@@ -38,14 +38,14 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.bonusQuestions == undefined) {
+  if (dataReceived.hasOwnProperty("bonusQuestions") == false) {
     res.status(400).send({
       error: "Missing the bonus questions",
     });
     return;
   } else if (dataReceived.bonusQuestions == true) {
     gameToCreate.bonusQuestions = true;
-    if (dataReceived.bonusQuestionsNumber == undefined) {
+    if (dataReceived.hasOwnProperty("bonusQuestionsNumber") == false) {
       res.status(400).send({
         error: "Missing the number of bonus questions",
       });
@@ -73,7 +73,7 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.semiFinalsNumberQuestions == undefined) {
+  if (dataReceived.hasOwnProperty("semiFinalsNumberQuestions") == false) {
     res.status(400).send({
       error: "Missing the number of semi-finals questions",
     });
@@ -94,7 +94,7 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.smallFinalNumberQuestions == undefined) {
+  if (dataReceived.hasOwnProperty("smallFinalNumberQuestions") == false) {
     res.status(400).send({
       error: "Missing the number of small final questions",
     });
@@ -115,7 +115,7 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.finalNumberQuestions == undefined) {
+  if (dataReceived.hasOwnProperty("finalNumberQuestions") == false) {
     res.status(400).send({
       error: "Missing the number of final questions",
     });
@@ -131,19 +131,19 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.timeToAnswerQCM == undefined) {
+  if (dataReceived.hasOwnProperty("timeToAnswerQCM") == false) {
     res.status(400).send({
       error: "Missing the time to answer MCQ questions",
     });
     return;
   }
-  if (dataReceived.timeToAnswerOpen == undefined) {
+  if (dataReceived.hasOwnProperty("timeToAnswerOpen") == false) {
     res.status(400).send({
       error: "Missing the time to answer open questions",
     });
     return;
   }
-  if (dataReceived.timeToAnswerEstimate == undefined) {
+  if (dataReceived.hasOwnProperty("timeToAnswerEstimate") == false) {
     res.status(400).send({
       error: "Missing the time to answer estimate questions",
     });
@@ -168,7 +168,7 @@ exports.createGame = (req, res) => {
     return;
   }
 
-  if (dataReceived.personsPerGroup != undefined) {
+  if (dataReceived.hasOwnProperty("personsPerGroup")) {
     const personsPerGroup = parseInt(dataReceived.personsPerGroup);
     if (!isNaN(personsPerGroup) && Number.isInteger(personsPerGroup)) {
       gameToCreate.personsPerGroup = personsPerGroup;
@@ -195,7 +195,7 @@ exports.createGame = (req, res) => {
       gameToCreate.personsPerGroup,
       gameToCreate.created_at,
     ],
-    (error, results, fields) => {
+    (error, results) => {
       if (error) {
         console.error(error);
         res.status(500).send({
