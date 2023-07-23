@@ -191,3 +191,65 @@ exports.updatePointsForGroup = (req, res) => {
     }
   }
 };
+
+exports.updateQualifiedStatusForGroup = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.groupId == undefined) {
+    res.status(400).send({
+      error: "Missing group id",
+    });
+    return;
+  } else if (dataReceived.groupId == "") {
+    res.status(400).send({
+      error: "Group id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(dataReceived.groupId)) {
+    res.status(400).send({
+      error: "Group id is not valid",
+    });
+    return;
+  }
+
+  if (dataReceived.hasOwnProperty("isQualified") == false) {
+    res.status(400).send({
+      error: "Missing qualified status",
+    });
+    return;
+  } else if (typeof dataReceived.isQualified != "boolean") {
+    res.status(400).send({
+      error: "Qualified status must be a boolean",
+    });
+    return;
+  }
+
+  pool.query(
+    "SELECT id FROM `Groups` WHERE id = ?",
+    [dataReceived.groupId],
+    (err, result) => {
+      if (err) throw err;
+      if (result.length == 0) {
+        res.status(404).send({
+          error: "Group not found",
+        });
+        return;
+      }
+      pool.query(
+        "UPDATE `Groups` SET is_qualified = ?, points = ? WHERE id = ?",
+        [dataReceived.isQualified, 0, dataReceived.groupId],
+        (err, result) => {
+          if (err) {
+            res.status(500).send({
+              error: "Error while updating the qualified status",
+            });
+            return;
+          }
+          res.status(200).send({
+            message: "Qualified status successfully updated",
+          });
+        }
+      );
+    }
+  );
+};

@@ -333,6 +333,114 @@ describe("PUT /group", () => {
   });
 });
 
+describe("PUT /group/updateQualifiedStatus", () => {
+  it("should return an error if the group id is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send()
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Missing group id");
+        done();
+      });
+  });
+
+  it("should return an error if the group id is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the group id is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: "invalid",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the isQualified is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Missing qualified status");
+        done();
+      });
+  });
+
+  it("should return an error if the isQualified is not a boolean", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+        isQualified: "invalid",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Qualified status must be a boolean");
+        done();
+      });
+  });
+
+  it("should return an error if the group does not exist", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: "00000000-0000-0000-0000-000000000000",
+        isQualified: true,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group not found");
+        done();
+      });
+  });
+
+  it("should return a success message if the group exists", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+        isQualified: true,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.message.should.eql("Qualified status successfully updated");
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;

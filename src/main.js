@@ -85,4 +85,8 @@ exports.startServer = () => {
   app.put(baseURL + "/group", (req, res) => {
     groupController.updatePointsForGroup(req, res);
   });
+
+  app.put(baseURL + "/group/updateQualifiedStatus", (req, res) => {
+    groupController.updateQualifiedStatusForGroup(req, res);
+  });
 };

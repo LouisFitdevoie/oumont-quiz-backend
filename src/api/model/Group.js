@@ -11,4 +11,7 @@ class Group {
   }
 }
 
+// FOR LATER :
+// Mettre à jour les points après les résultats des finales pour déterminer le classement en récupérant les points du 5e groupe et en ajoutant des points aaux 4 groupes participants pour être placés correctement dans le classement final
+
 module.exports = Group;
