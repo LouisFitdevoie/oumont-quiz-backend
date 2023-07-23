@@ -77,4 +77,8 @@ exports.startServer = () => {
   app.post(baseURL + "/group", (req, res) => {
     groupController.createGroup(req, res);
   });
+
+  app.get(baseURL + "/group", (req, res) => {
+    groupController.getAllGroupsForGame(req, res);
+  });
 };

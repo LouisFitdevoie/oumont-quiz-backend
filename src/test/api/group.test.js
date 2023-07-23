@@ -14,6 +14,56 @@ const baseURL = `/api/${process.env.API_VERSION}`;
 let groupId = "";
 let gameIdCreated = "";
 
+describe("GET /group?gameId=:gameId without groups in the DB", () => {
+  it("should return an error if the game id is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/group")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Missing game id");
+        done();
+      });
+  });
+
+  it("should return an error if the game id is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/group?gameId=")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the game id is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/group?gameId=invalid")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if no group exists for the game", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/group?gameId=00000000-0000-0000-0000-000000000000")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("No groups found for this game");
+        done();
+      });
+  });
+});
+
 describe("POST /group", () => {
   it("should return an error if the name is missing", (done) => {
     chai
@@ -136,12 +186,41 @@ describe("POST /group", () => {
             gameId: gameIdCreated,
           })
           .end((err, res) => {
-            groupId = res.body.groupId;
             res.should.be.a("object");
             res.body.should.have.property("message");
             res.body.message.should.be.eql("Group successfully created");
             done();
           });
+      });
+  });
+});
+
+describe("GET /group?gameId=:gameId with groups in the DB", () => {
+  it("should return the groups for the game", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/group?gameId=" + gameIdCreated)
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.message.should.be.eql("Groups successfully retrieved");
+        res.body.should.have.property("groups");
+        res.body.groups.should.be.a("array");
+        res.body.groups.length.should.be.eql(1);
+        res.body.groups[0].should.have.property("id");
+        res.body.groups[0].should.have.property("name");
+        res.body.groups[0].should.have.property("gameId");
+        res.body.groups[0].should.have.property("points");
+        res.body.groups[0].should.have.property("bonus");
+        res.body.groups[0].should.have.property("isQualified");
+        res.body.groups[0].id.should.be.a("string");
+        groupId = res.body.groups[0].id;
+        res.body.groups[0].name.should.be.eql("Group 1");
+        res.body.groups[0].gameId.should.be.eql(gameIdCreated);
+        res.body.groups[0].points.should.be.eql(0);
+        res.body.groups[0].bonus.should.be.eql("");
+        res.body.groups[0].isQualified.should.be.eql(false);
+        done();
       });
   });
 });

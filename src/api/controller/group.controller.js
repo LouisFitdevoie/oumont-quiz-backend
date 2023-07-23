@@ -78,3 +78,54 @@ exports.createGroup = (req, res) => {
     );
   }
 };
+
+exports.getAllGroupsForGame = (req, res) => {
+  const gameId = req.query.gameId;
+
+  if (gameId == undefined) {
+    res.status(400).send({
+      error: "Missing game id",
+    });
+    return;
+  } else if (gameId == "") {
+    res.status(400).send({
+      error: "Game id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(gameId)) {
+    res.status(400).send({
+      error: "Game id is not valid",
+    });
+    return;
+  } else {
+    pool.query(
+      "SELECT * FROM `Groups` WHERE game_id = ?",
+      [gameId],
+      (err, result) => {
+        if (err) throw err;
+        if (result.length == 0) {
+          res.status(404).send({
+            error: "No groups found for this game",
+          });
+          return;
+        } else {
+          let resultArray = [];
+          for (let i = 0; i < result.length; i++) {
+            resultArray.push({
+              id: result[i].id,
+              name: result[i].name,
+              gameId: result[i].game_id,
+              points: result[i].points,
+              bonus: result[i].bonus,
+              isQualified: Boolean(result[i].is_qualified),
+            });
+          }
+          res.status(200).send({
+            message: "Groups successfully retrieved",
+            groups: resultArray,
+          });
+        }
+      }
+    );
+  }
+};
