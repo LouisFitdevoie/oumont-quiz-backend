@@ -81,4 +81,8 @@ exports.startServer = () => {
   app.get(baseURL + "/group", (req, res) => {
     groupController.getAllGroupsForGame(req, res);
   });
+
+  app.put(baseURL + "/group", (req, res) => {
+    groupController.updatePointsForGroup(req, res);
+  });
 };

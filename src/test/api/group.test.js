@@ -225,6 +225,114 @@ describe("GET /group?gameId=:gameId with groups in the DB", () => {
   });
 });
 
+describe("PUT /group", () => {
+  it("should return an error if the group id is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send()
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Missing group id");
+        done();
+      });
+  });
+
+  it("should return an error if the group id is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the group id is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: "invalid",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the points are missing", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: groupId,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Missing points");
+        done();
+      });
+  });
+
+  it("should return an error if the points are not a number", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: groupId,
+        points: "invalid",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Points must be a number");
+        done();
+      });
+  });
+
+  it("should return an error if the group id does not exist", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: "00000000-0000-0000-0000-000000000000",
+        points: 10,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Group not found");
+        done();
+      });
+  });
+
+  it("should update the points for the group", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group")
+      .send({
+        groupId: groupId,
+        points: 10,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.message.should.eql("Points successfully updated");
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;

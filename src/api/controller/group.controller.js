@@ -129,3 +129,65 @@ exports.getAllGroupsForGame = (req, res) => {
     );
   }
 };
+
+exports.updatePointsForGroup = (req, res) => {
+  const dataReceived = req.body;
+  if (dataReceived.groupId == undefined) {
+    res.status(400).send({
+      error: "Missing group id",
+    });
+    return;
+  } else if (dataReceived.groupId == "") {
+    res.status(400).send({
+      error: "Group id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(dataReceived.groupId)) {
+    res.status(400).send({
+      error: "Group id is not valid",
+    });
+    return;
+  }
+
+  if (dataReceived.points == undefined) {
+    res.status(400).send({
+      error: "Missing points",
+    });
+    return;
+  } else {
+    const points = parseInt(dataReceived.points);
+    if (isNaN(points)) {
+      res.status(400).send({
+        error: "Points must be a number",
+      });
+      return;
+    } else {
+      let pointsUpdated = points;
+      pool.query(
+        "SELECT points FROM `Groups` WHERE id = ?",
+        [dataReceived.groupId],
+        (err, result) => {
+          if (err) throw err;
+          if (result.length == 0) {
+            res.status(404).send({
+              error: "Group not found",
+            });
+            return;
+          } else {
+            pointsUpdated += parseInt(result[0].points);
+            pool.query(
+              "UPDATE `Groups` SET points = ? WHERE id = ?",
+              [pointsUpdated, dataReceived.groupId],
+              (err, result) => {
+                if (err) throw err;
+                res.status(200).send({
+                  message: "Points successfully updated",
+                });
+              }
+            );
+          }
+        }
+      );
+    }
+  }
+};
