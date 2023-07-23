@@ -213,6 +213,7 @@ describe("GET /group?gameId=:gameId with groups in the DB", () => {
         res.body.groups[0].should.have.property("points");
         res.body.groups[0].should.have.property("bonus");
         res.body.groups[0].should.have.property("isQualified");
+        res.body.groups[0].should.have.property("ranking");
         res.body.groups[0].id.should.be.a("string");
         groupId = res.body.groups[0].id;
         res.body.groups[0].name.should.be.eql("Group 1");
@@ -220,6 +221,7 @@ describe("GET /group?gameId=:gameId with groups in the DB", () => {
         res.body.groups[0].points.should.be.eql(0);
         res.body.groups[0].bonus.should.be.eql("");
         res.body.groups[0].isQualified.should.be.eql(false);
+        res.body.groups[0].ranking.should.be.eql(0);
         done();
       });
   });
@@ -408,6 +410,56 @@ describe("PUT /group/updateQualifiedStatus", () => {
       });
   });
 
+  it("should return an error if the ranking is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+        isQualified: true,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Missing ranking");
+        done();
+      });
+  });
+
+  it("should return an error if the ranking is not a number", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+        isQualified: true,
+        ranking: "invalid",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Ranking must be a number");
+        done();
+      });
+  });
+
+  it("should return an error if the ranking is negative", (done) => {
+    chai
+      .request(serverAddress)
+      .put(baseURL + "/group/updateQualifiedStatus")
+      .send({
+        groupId: groupId,
+        isQualified: true,
+        ranking: -1,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Ranking must be greater than 0");
+        done();
+      });
+  });
+
   it("should return an error if the group does not exist", (done) => {
     chai
       .request(serverAddress)
@@ -415,6 +467,7 @@ describe("PUT /group/updateQualifiedStatus", () => {
       .send({
         groupId: "00000000-0000-0000-0000-000000000000",
         isQualified: true,
+        ranking: 1,
       })
       .end((err, res) => {
         res.should.be.a("object");
@@ -431,6 +484,7 @@ describe("PUT /group/updateQualifiedStatus", () => {
       .send({
         groupId: groupId,
         isQualified: true,
+        ranking: 1,
       })
       .end((err, res) => {
         res.should.be.a("object");

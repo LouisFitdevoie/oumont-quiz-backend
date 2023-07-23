@@ -8,6 +8,7 @@ class Group {
     this.points = parseInt(points);
     this.bonus = bonus; // For the DB, will need to be a string like "1,2,3"
     this.isQualified = false;
+    this.ranking = 0;
   }
 }
 

@@ -50,7 +50,7 @@ exports.createGroup = (req, res) => {
         } else {
           groupToCreate.gameId = dataReceived.gameId;
           pool.query(
-            "INSERT INTO `Groups` (id, name, game_id, points, bonus, is_qualified) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO `Groups` (id, name, game_id, points, bonus, is_qualified, ranking) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
               groupToCreate.id,
               groupToCreate.name,
@@ -58,6 +58,7 @@ exports.createGroup = (req, res) => {
               groupToCreate.points,
               "",
               false,
+              0,
             ],
             (err, result) => {
               if (err) {
@@ -119,6 +120,7 @@ exports.getAllGroupsForGame = (req, res) => {
               points: result[i].points,
               bonus: result[i].bonus,
               isQualified: Boolean(result[i].is_qualified),
+              ranking: result[i].ranking,
             });
           }
           res.status(200).send({
@@ -225,32 +227,89 @@ exports.updateQualifiedStatusForGroup = (req, res) => {
     return;
   }
 
-  pool.query(
-    "SELECT id FROM `Groups` WHERE id = ?",
-    [dataReceived.groupId],
-    (err, result) => {
-      if (err) throw err;
-      if (result.length == 0) {
-        res.status(404).send({
-          error: "Group not found",
-        });
-        return;
-      }
-      pool.query(
-        "UPDATE `Groups` SET is_qualified = ?, points = ? WHERE id = ?",
-        [dataReceived.isQualified, 0, dataReceived.groupId],
-        (err, result) => {
-          if (err) {
-            res.status(500).send({
-              error: "Error while updating the qualified status",
-            });
-            return;
-          }
-          res.status(200).send({
-            message: "Qualified status successfully updated",
+  if (dataReceived.hasOwnProperty("ranking") == false) {
+    res.status(400).send({
+      error: "Missing ranking",
+    });
+    return;
+  } else if (isNaN(dataReceived.ranking)) {
+    res.status(400).send({
+      error: "Ranking must be a number",
+    });
+    return;
+  } else if (dataReceived.ranking < 1) {
+    res.status(400).send({
+      error: "Ranking must be greater than 0",
+    });
+    return;
+  }
+
+  if (dataReceived.ranking > 0 && dataReceived.ranking < 5) {
+    pool.query(
+      "SELECT id FROM `Groups` WHERE id = ?",
+      [dataReceived.groupId],
+      (err, result) => {
+        if (err) throw err;
+        if (result.length == 0) {
+          res.status(404).send({
+            error: "Group not found",
           });
+          return;
         }
-      );
-    }
-  );
+        pool.query(
+          "UPDATE `Groups` SET is_qualified = ?, points = ?, ranking = ? WHERE id = ?",
+          [
+            dataReceived.isQualified,
+            0,
+            dataReceived.ranking,
+            dataReceived.groupId,
+          ],
+          (err, result) => {
+            if (err) {
+              res.status(500).send({
+                error: "Error while updating the qualified status",
+              });
+              return;
+            }
+            res.status(200).send({
+              message: "Qualified status successfully updated",
+            });
+          }
+        );
+      }
+    );
+  } else {
+    pool.query(
+      "SELECT id FROM `Groups` WHERE id = ?",
+      [dataReceived.groupId],
+      (err, result) => {
+        if (err) throw err;
+        if (result.length == 0) {
+          res.status(404).send({
+            error: "Group not found",
+          });
+          return;
+        }
+        pool.query(
+          "UPDATE `Groups` SET is_qualified = ?, ranking = ? WHERE id = ?",
+          [
+            dataReceived.isQualified,
+            dataReceived.ranking,
+            dataReceived.groupId,
+          ],
+          (err, result) => {
+            if (err) {
+              res.status(500).send({
+                error: "Error while updating the qualified status",
+              });
+              return;
+            }
+            res.status(200).send({
+              message: "Qualified status successfully updated",
+            });
+          }
+        );
+      }
+    );
+  }
 };

@@ -24,7 +24,8 @@ CREATE TABLE `Groups` (
   `game_id` VARCHAR(255) NOT NULL,
   `points` INT NOT NULL,
   `bonus` VARCHAR(255) NOT NULL,
-  `is_qualified` BOOLEAN NOT NULL
+  `is_qualified` BOOLEAN NOT NULL,
+  `ranking` INT NOT NULL
 );
 
 CREATE TABLE `Questions` (
@@ -70,7 +71,8 @@ CREATE TABLE `Groups` (
   `game_id` VARCHAR(255) NOT NULL,
   `points` INT NOT NULL,
   `bonus` VARCHAR(255) NOT NULL,
-  `is_qualified` BOOLEAN NOT NULL
+  `is_qualified` BOOLEAN NOT NULL,
+  `ranking` INT NOT NULL
 );
 
 CREATE TABLE `Questions` (
@@ -116,7 +118,8 @@ CREATE TABLE `Groups` (
   `game_id` VARCHAR(255) NOT NULL,
   `points` INT NOT NULL,
   `bonus` VARCHAR(255) NOT NULL,
-  `is_qualified` BOOLEAN NOT NULL
+  `is_qualified` BOOLEAN NOT NULL,
+  `ranking` INT NOT NULL
 );
 
 CREATE TABLE `Questions` (
