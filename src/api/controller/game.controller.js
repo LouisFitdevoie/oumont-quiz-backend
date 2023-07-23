@@ -195,7 +195,7 @@ exports.createGame = (req, res) => {
       gameToCreate.personsPerGroup,
       gameToCreate.created_at,
     ],
-    (error, results, fields) => {
+    (error, results) => {
       if (error) {
         console.error(error);
         res.status(500).send({

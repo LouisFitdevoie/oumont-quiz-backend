@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const express = require("express");
 
 const gameController = require("./api/controller/game.controller.js");
+const groupController = require("./api/controller/group.controller.js");
 
 exports.startServer = () => {
   const app = express();
@@ -50,6 +51,8 @@ exports.startServer = () => {
 
   app.use(express.json());
 
+  //***** GAMES *****//
+
   app.get(baseURL + "/", (req, res) => {
     res.json({
       message: "Hello API World!",
@@ -67,5 +70,11 @@ exports.startServer = () => {
 
   app.get(baseURL + "/games", (req, res) => {
     gameController.getAllGames(req, res);
+  });
+
+  //***** GROUPS *****//
+
+  app.post(baseURL + "/group", (req, res) => {
+    groupController.createGroup(req, res);
   });
 };
