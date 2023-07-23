@@ -4,8 +4,6 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-require("../../main.js").startServer();
-
 const serverAddress = `http://${process.env.API_HOST}:${process.env.API_PORT}`;
 const baseURL = "/api/" + process.env.API_VERSION;
 
@@ -23,4 +21,28 @@ describe("GET /", () => {
         done();
       });
   });
+});
+
+after((done) => {
+  const database = require("../../database.js");
+  const pool = database.pool;
+  process.env.TEST_FILES_COMPLETED++;
+  if (process.env.TEST_FILES_COMPLETED == process.env.TEST_FILES_TOTAL) {
+    pool.getConnection((err, connection) => {
+      if (err) throw err;
+      connection.query("DELETE FROM `Groups`", (err, result) => {
+        if (err) throw err;
+        connection.query("DELETE FROM `Questions`", (err, result) => {
+          if (err) throw err;
+          connection.query("DELETE FROM `Games`", (err, result) => {
+            if (err) throw err;
+            connection.release();
+            done();
+          });
+        });
+      });
+    });
+  } else {
+    done();
+  }
 });

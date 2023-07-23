@@ -37,7 +37,8 @@ CREATE TABLE `Questions` (
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
   `is_bonus` BOOLEAN NOT NULL,
-  `game_id` VARCHAR(255) NOT NULL
+  `game_id` VARCHAR(255) NOT NULL,
+  `is_asked` BOOLEAN NOT NULL
 );
 
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
@@ -82,7 +83,8 @@ CREATE TABLE `Questions` (
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
   `is_bonus` BOOLEAN NOT NULL,
-  `game_id` VARCHAR(255) NOT NULL
+  `game_id` VARCHAR(255) NOT NULL,
+  `is_asked` BOOLEAN NOT NULL
 );
 
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups_test` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
@@ -127,7 +129,8 @@ CREATE TABLE `Questions` (
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
   `is_bonus` BOOLEAN NOT NULL,
-  `game_id` VARCHAR(255) NOT NULL
+  `game_id` VARCHAR(255) NOT NULL,
+  `is_asked` BOOLEAN NOT NULL
 );
 
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups_dev` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
