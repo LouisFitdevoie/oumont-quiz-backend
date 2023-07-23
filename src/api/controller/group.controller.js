@@ -8,7 +8,7 @@ exports.createGroup = (req, res) => {
   const dataReceived = req.body;
   const groupToCreate = new Group("", "", 0, []);
 
-  if (dataReceived.name == undefined) {
+  if (dataReceived.hasOwnProperty("name") == false) {
     res.status(400).send({
       error: "Missing group name",
     });
@@ -21,7 +21,7 @@ exports.createGroup = (req, res) => {
   }
   groupToCreate.name = dataReceived.name.trim();
 
-  if (dataReceived.gameId == undefined) {
+  if (dataReceived.hasOwnProperty("gameId") == false) {
     res.status(400).send({
       error: "Missing game id",
     });
@@ -80,14 +80,15 @@ exports.createGroup = (req, res) => {
 };
 
 exports.getAllGroupsForGame = (req, res) => {
-  const gameId = req.query.gameId;
-
-  if (gameId == undefined) {
+  if (req.query.hasOwnProperty("gameId") == false) {
     res.status(400).send({
       error: "Missing game id",
     });
     return;
-  } else if (gameId == "") {
+  }
+
+  const gameId = req.query.gameId;
+  if (gameId == "") {
     res.status(400).send({
       error: "Game id cannot be empty",
     });
@@ -132,7 +133,7 @@ exports.getAllGroupsForGame = (req, res) => {
 
 exports.updatePointsForGroup = (req, res) => {
   const dataReceived = req.body;
-  if (dataReceived.groupId == undefined) {
+  if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
     });
@@ -149,7 +150,7 @@ exports.updatePointsForGroup = (req, res) => {
     return;
   }
 
-  if (dataReceived.points == undefined) {
+  if (dataReceived.hasOwnProperty("points") == false) {
     res.status(400).send({
       error: "Missing points",
     });
@@ -195,7 +196,7 @@ exports.updatePointsForGroup = (req, res) => {
 exports.updateQualifiedStatusForGroup = (req, res) => {
   const dataReceived = req.body;
 
-  if (dataReceived.groupId == undefined) {
+  if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
     });
