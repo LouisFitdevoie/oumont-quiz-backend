@@ -26,6 +26,7 @@ class Game {
     });
     this.timeToAnswer = timeToAnswer; // For the DB, it will be a string like "10,15,20"
     this.personsPerGroup = parseInt(personsPerGroup);
+    this.created_at = new Date();
   }
 }
 

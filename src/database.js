@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == "production") {
   db.user = process.env.DB_USER_DEV;
   db.password = process.env.DB_PASSWORD_DEV;
 } else if (process.env.NODE_ENV == "testing") {
-  db.database = process.env.DATABASE_TEST;
+  db.database = process.env.DATABASE_TESTING;
   db.user = process.env.DB_USER_TEST;
   db.password = process.env.DB_PASSWORD_TEST;
 }

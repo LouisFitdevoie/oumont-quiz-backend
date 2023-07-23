@@ -2,6 +2,8 @@ require("dotenv").config();
 const mysql = require("mysql");
 const express = require("express");
 
+const gameController = require("./api/controller/game.controller.js");
+
 exports.startServer = () => {
   const app = express();
 
@@ -21,7 +23,7 @@ exports.startServer = () => {
     db.user = process.env.DB_USER_DEV;
     db.password = process.env.DB_PASSWORD_DEV;
   } else if (process.env.NODE_ENV == "testing") {
-    db.database = process.env.DATABASE_TEST;
+    db.database = process.env.DATABASE_TESTING;
     db.user = process.env.DB_USER_TEST;
     db.password = process.env.DB_PASSWORD_TEST;
   }
@@ -53,5 +55,17 @@ exports.startServer = () => {
       message: "Hello API World!",
       status: 200,
     });
+  });
+
+  app.post(baseURL + "/game", (req, res) => {
+    gameController.createGame(req, res);
+  });
+
+  app.get(baseURL + "/game/:id", (req, res) => {
+    gameController.getGameById(req, res);
+  });
+
+  app.get(baseURL + "/games", (req, res) => {
+    gameController.getAllGames(req, res);
   });
 };
