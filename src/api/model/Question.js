@@ -14,6 +14,7 @@ class Question {
     this.explanation = line[6];
     this.isBonus = new Boolean(line[7]);
     this.gameId = gameId;
+    this.isAsked = false;
   }
 }
 
