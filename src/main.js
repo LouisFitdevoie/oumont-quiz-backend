@@ -4,6 +4,7 @@ const express = require("express");
 
 const gameController = require("./api/controller/game.controller.js");
 const groupController = require("./api/controller/group.controller.js");
+const questionController = require("./api/controller/question.controller.js");
 
 exports.startServer = () => {
   const app = express();
@@ -88,5 +89,11 @@ exports.startServer = () => {
 
   app.put(baseURL + "/group/updateQualifiedStatus", (req, res) => {
     groupController.updateQualifiedStatusForGroup(req, res);
+  });
+
+  //***** QUESTIONS *****//
+
+  app.post(baseURL + "/questions", (req, res) => {
+    questionController.createQuestions(req, res);
   });
 };
