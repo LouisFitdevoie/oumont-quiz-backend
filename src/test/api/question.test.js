@@ -149,6 +149,83 @@ describe("POST /questions", () => {
   });
 });
 
+describe("GET /randomThemes", () => {
+  it("should return an error if the game ID is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomThemes")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id must be provided");
+        done();
+      });
+  });
+
+  it("should return an error if the game ID is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomThemes")
+      .send({
+        gameId: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the game ID is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomThemes")
+      .send({
+        gameId: "123",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if no questions are associated to this game id", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomThemes")
+      .send({
+        gameId: "00000000-0000-0000-0000-000000000000",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("No questions found for this game");
+        done();
+      });
+  });
+
+  it("should return an array with two random themes", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomThemes")
+      .send({
+        gameId: gameIdCreated,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.should.have.property("themes");
+        res.body.message.should.be.eql("Themes randomly selected");
+        res.body.themes.should.be.a("array");
+        res.body.themes.length.should.be.eql(2);
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;

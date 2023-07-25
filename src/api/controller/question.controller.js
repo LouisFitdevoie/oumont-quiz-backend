@@ -92,3 +92,43 @@ exports.createQuestions = (req, res) => {
     message: `${questionArray.length} question(s) created`,
   });
 };
+
+exports.getRandomThemes = (req, res) => {
+  const dataReceived = req.body;
+  const numberOfRandomThemes = 2;
+
+  if (dataReceived.hasOwnProperty("gameId") == false) {
+    res.status(400).send({ error: "Game id must be provided" });
+    return;
+  } else if (dataReceived.gameId == "") {
+    res.status(400).send({ error: "Game id cannot be empty" });
+    return;
+  } else if (!uuid.validate(dataReceived.gameId)) {
+    res.status(400).send({ error: "Game id is not valid" });
+    return;
+  }
+
+  pool.query(
+    "SELECT DISTINCT theme FROM Questions WHERE game_id = ?",
+    [dataReceived.gameId],
+    (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error while getting the themes" });
+        return;
+      } else if (results.length == 0) {
+        res.status(400).send({ error: "No questions found for this game" });
+        return;
+      } else {
+        let randomThemes = [];
+
+        for (let i = 0; i < numberOfRandomThemes; i++) {
+          let randomIndex = Math.floor(Math.random() * results.length);
+          randomThemes.push(results[randomIndex].theme);
+          results.splice(randomIndex, 1);
+        }
+
+        res.send({ message: "Themes randomly selected", themes: randomThemes });
+      }
+    }
+  );
+};

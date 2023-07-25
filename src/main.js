@@ -96,4 +96,8 @@ exports.startServer = () => {
   app.post(baseURL + "/questions", (req, res) => {
     questionController.createQuestions(req, res);
   });
+
+  app.get(baseURL + "/randomThemes", (req, res) => {
+    questionController.getRandomThemes(req, res);
+  });
 };
