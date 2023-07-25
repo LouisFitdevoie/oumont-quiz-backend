@@ -123,11 +123,82 @@ exports.getRandomThemes = (req, res) => {
 
         for (let i = 0; i < numberOfRandomThemes; i++) {
           let randomIndex = Math.floor(Math.random() * results.length);
+          //*****
+          //TODO - Check if questions are available for this theme before pushing it
+          //*****
           randomThemes.push(results[randomIndex].theme);
           results.splice(randomIndex, 1);
         }
 
         res.send({ message: "Themes randomly selected", themes: randomThemes });
+      }
+    }
+  );
+};
+
+exports.getRandomQuestionByTheme = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.hasOwnProperty("gameId") == false) {
+    res.status(400).send({ error: "Game id must be provided" });
+    return;
+  } else if (dataReceived.gameId == "") {
+    res.status(400).send({ error: "Game id cannot be empty" });
+    return;
+  } else if (!uuid.validate(dataReceived.gameId)) {
+    res.status(400).send({ error: "Game id is not valid" });
+    return;
+  }
+
+  if (dataReceived.hasOwnProperty("theme") == false) {
+    res.status(400).send({ error: "Theme must be provided" });
+    return;
+  } else if (dataReceived.theme == "") {
+    res.status(400).send({ error: "Theme cannot be empty" });
+    return;
+  }
+
+  //TODO - Depending on the bonus, we need to know if we return the bonus question or not (TBD)
+
+  pool.query(
+    "SELECT * FROM Questions WHERE game_id = ? AND theme = ? AND is_asked = false",
+    [dataReceived.gameId, dataReceived.theme],
+    (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error while getting the question" });
+        return;
+      } else if (results.length == 0) {
+        res.status(400).send({ error: "No questions found for this theme" });
+        return;
+      } else {
+        let randomIndex = Math.floor(Math.random() * results.length);
+        let question = results[randomIndex];
+
+        pool.query(
+          "UPDATE Questions SET is_asked = true WHERE id = ?",
+          [question.id],
+          (error, results) => {
+            if (error) {
+              res.status(500).send({
+                error: "Error while updating the question",
+              });
+              return;
+            } else {
+              res.send({
+                message: "Question randomly selected",
+                question: {
+                  id: question.id,
+                  questionType: question.question_type,
+                  question: question.question,
+                  answer: question.answer,
+                  points: question.points,
+                  choices: question.choices,
+                  explanation: question.explanation,
+                },
+              });
+            }
+          }
+        );
       }
     }
   );

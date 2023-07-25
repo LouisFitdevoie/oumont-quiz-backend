@@ -226,6 +226,122 @@ describe("GET /randomThemes", () => {
   });
 });
 
+describe("GET /randomQuestion", () => {
+  it("should return an error if the game ID is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id must be provided");
+        done();
+      });
+  });
+
+  it("should return an error if the game ID is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the game ID is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: "123",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql("Game id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the theme is not provided", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: gameIdCreated,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Theme must be provided");
+        done();
+      });
+  });
+
+  it("should return an error if the theme is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: gameIdCreated,
+        theme: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Theme cannot be empty");
+        done();
+      });
+  });
+
+  it("should return a question if the theme is valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: gameIdCreated,
+        theme: "Géographie",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.should.have.property("question");
+        res.body.message.should.be.eql("Question randomly selected");
+        res.body.question.should.be.a("object");
+        res.body.question.should.have.property("id");
+        res.body.question.should.have.property("questionType");
+        res.body.question.should.have.property("question");
+        res.body.question.should.have.property("answer");
+        res.body.question.should.have.property("points");
+        res.body.question.should.have.property("choices");
+        res.body.question.should.have.property("explanation");
+        done();
+      });
+  });
+
+  it("should return an error if no questions are found for this theme", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/randomQuestion")
+      .send({
+        gameId: gameIdCreated,
+        theme: "Géographie",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("No questions found for this theme");
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;
