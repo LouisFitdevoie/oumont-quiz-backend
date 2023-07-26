@@ -12,6 +12,7 @@ const serverAddress = `http://${process.env.API_HOST}:${process.env.API_PORT}`;
 const baseURL = "/api/" + process.env.API_VERSION;
 
 let gameIdCreated = "";
+let questionAskedId = "";
 
 describe("POST /questions", () => {
   it("should return an error if the game ID is missing", (done) => {
@@ -315,6 +316,7 @@ describe("GET /randomQuestion", () => {
         res.body.message.should.be.eql("Question randomly selected");
         res.body.question.should.be.a("object");
         res.body.question.should.have.property("id");
+        questionAskedId = res.body.question.id;
         res.body.question.should.have.property("questionType");
         res.body.question.should.have.property("question");
         res.body.question.should.have.property("answer");
@@ -337,6 +339,88 @@ describe("GET /randomQuestion", () => {
         res.should.be.a("object");
         res.body.should.have.property("error");
         res.body.error.should.eql("No questions found for this theme");
+        done();
+      });
+  });
+});
+
+describe("GET /answer", () => {
+  it("should return an error if the question id is not provided", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/answer")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question id must be provided");
+        done();
+      });
+  });
+
+  it("should return an error if the question id is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/answer")
+      .send({
+        questionId: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the question id is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/answer")
+      .send({
+        questionId: "123",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question id is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the id is not found in the database", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/answer")
+      .send({
+        questionId: "00000000-0000-0000-0000-000000000000",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("No asked question found with this id");
+        done();
+      });
+  });
+
+  it("should return the answer of the question", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/answer")
+      .send({
+        questionId: questionAskedId,
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.should.have.property("answer");
+        res.body.should.have.property("explanation");
+        res.body.should.have.property("choices");
+        res.body.should.have.property("points");
+        res.body.message.should.be.eql("Answer retrieved");
+        res.body.answer.should.be.eql("Bruxelles");
+        res.body.explanation.should.be.eql("C'est la capitale de la Belgique");
+        res.body.choices.should.be.eql("");
+        res.body.points.should.be.eql(1);
         done();
       });
   });

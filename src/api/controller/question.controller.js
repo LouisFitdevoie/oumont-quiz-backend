@@ -203,3 +203,41 @@ exports.getRandomQuestionByTheme = (req, res) => {
     }
   );
 };
+
+exports.getAnswer = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.hasOwnProperty("questionId") == false) {
+    res.status(400).send({ error: "Question id must be provided" });
+    return;
+  } else if (dataReceived.questionId == "") {
+    res.status(400).send({ error: "Question id cannot be empty" });
+    return;
+  } else if (!uuid.validate(dataReceived.questionId)) {
+    res.status(400).send({ error: "Question id is not valid" });
+    return;
+  }
+
+  pool.query(
+    "SELECT * FROM Questions WHERE id = ? AND is_asked = true",
+    [dataReceived.questionId],
+    (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error while getting the answer" });
+        return;
+      } else if (results.length == 0) {
+        res.status(400).send({ error: "No asked question found with this id" });
+        return;
+      } else {
+        let question = results[0];
+        res.send({
+          message: "Answer retrieved",
+          answer: question.answer,
+          explanation: question.explanation,
+          choices: question.choices,
+          points: question.points,
+        });
+      }
+    }
+  );
+};
