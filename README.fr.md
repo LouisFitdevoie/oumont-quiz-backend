@@ -57,42 +57,22 @@ Quand l'animateur créera une nouvelle partie, il devra suivre plusieurs étapes
 
 Une fois que toutes ces étapes sont terminées, l'animateur peut cliquer sur le bouton `Commencer la partie` pour lancer la partie et démarrer l'étape de qualification.
 
-### Etape de qualification
+### Partie
 
-A chaque question, un groupe sera tiré au hasard par l'ordinateur pour choisir le thème de la question qui va être posée. Quand un groupe est sélectionné, il ne pourra plus être sélectionné à nouveau pour choisir un thème tant que tous les groupes n'auront pas été sélectionnés une fois.
-Une fois que le groupe aura sélectionné le thème, une question sera choisie au hasard et sera posée à l'ensemble des groupes qui répondront sur une feuille de réponse qui sera récupérée par l'animateur entre chaque question avant que la réponse ne soit donnée.
-Pour les questions bonus, si l'animateur a choisi d'en inclure dans la partie, un groupe sera sélectionné au hasard pour y répondre. Si le groupe répond correctement, il gagnera un avantage (voir _Avantages_). Si le groupe répond incorrectement, il ne se passera rien.
-Dans tous les cas, chaque question posée ne pourra plus être posée à nouveau au cours de la partie.
-Une fois que le nombre de questions défini par l'animateur pour l'étape de qualification a été atteint (sans compter les questions bonus), l'étape de qualification est terminée.
+Au début de la partie, un groupe est tiré au hasard par l'ordinateur pour choisir un thème parmi ceux affichés à l'écran. Une fois que le thème a été choisi, l'ordinateur choisit une question au hasard parmi les questions qui n'ont pas encore été posées dans ce thème et la pose à l'ensemble des groupes qui répondront sur une feuille de réponse qu'ils devront déposer dans une urne à la fin de chaque question avant que la réponse ne soit affichée.
+A la fin des trois questions, on devra choisir de soit passer à un nouveau thème, soit faire une pause, soit terminer la partie. Si on choisit de passer à un nouvbeau thème, trois questions seront posées sur le thème sélectionné par le groupe avant qu'un autre groupe ne soit sélectionné pour choisir un nouveau thème. Si on choisit de faire une pause, l'utilisateur devra rentrer les réponses données par les groupes afin de pouvoir calculer les scores. Au moment où ils voudront reprendre la partie, un classement intermédiaire s'affichera à l'écran avant de reprendre la partie. Si on choisit de terminer la partie, l'utilisateur devra rentrer les réponses données par les groupes afin de pouvoir calculer les scores. Une fois que les réponses ont été saisies, l'ordinateur calcule le score de chaque groupe et affiche le classement des groupes sous la forme d'un diagramme en bâtonnets horizontal.
 
-### Calcul des points pour l'étape de qualification
+### Calcul des points
 
-A la suite de l'étape de qualification, l'animateur doit saisir les réponses de chaque groupe dans l'application.
+Quand l'utilisateur voudra saisir les réponses données par les groupes, il devra saisir les réponses données par chaque groupe pour chaque question.
 Pour les questions à choix multiples et les questions ouvertes, il devra simplement spécifier si le groupe a répondu correctement ou non.
 Pour les questions d'estimation, il devra saisir la réponse donnée par le groupe et l'ordinateur calculera le nombre de points que le groupe a obtenu en fonction de la réponse donnée et de la réponse correcte.
 Une fois que toutes les réponses ont été saisies, l'ordinateur calcule le score de chaque groupe et affiche le classement des groupes sous la forme d'un diagramme en bâtonnets horizontal.
-Les 4 groupes ayant obtenu le plus de points sont qualifiés pour les demi-finales.
-
-### Etape finale
-
-#### Demi-finales
-
-Les 4 groupes qualifiés sont répartis en 2 demi-finales. Le groupe ayant fini premier de l'étape de qualification affrontera le groupe ayant fini quatrième et le groupe ayant fini deuxième affrontera le groupe ayant fini troisième.
-Le format des demi-finales reste à déterminer.
-
-#### Petite finale
-
-Les 2 groupes ayant obtenu le moins de points pendant les demi-finales s'affrontent pour déterminer la 3ème et 4ème place.
-Le format de la petite finale reste à déterminer.
-
-#### Finale
-
-Les 2 groupes ayant obtenu le plus de points pendant les demi-finales s'affrontent pour déterminer la 1ère et 2ème place.
-Le format de la finale reste à déterminer.
 
 ## Avantages
 
-Les avantages sont des bonus que les groupes peuvent obtenir en répondant correctement à une question bonus. Ils peuvent être utilisés pendant l'étape de qualification.
+Les avantages seront développés dans un second temps. Pour le moment, ils ne sont pas disponibles.
+Les avantages sont des bonus que les groupes peuvent obtenir en répondant correctement à une question bonus.
 Les avantages disponibles sont les suivants :
 
 | Avantage  | Description                                                                                                                                                                                                   |

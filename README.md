@@ -57,42 +57,22 @@ When the host creates a new game, he or she must follow several steps:
 
 Once all these steps have been completed, the host can click on the `Start Game` button to launch the game and start the qualifying round.
 
-### Qualifying round
+### Game
 
-Each question, a random group will be selected by the computer to choose the theme of the next question. When a group is selected, he won't be able to choose the theme of another question while all the other groups haven't been selected once.
-After the group has selected the theme, a random question will be selected to be asked to all the groups. They will answer to the question on a sheet of paper and it will be collected by the host between each questions before the answer is revealed.
-For the bonus questions, if the host choose to include them for the game, 1 group will be randomly selected to answer the question. If the group answer correctly, they will earn an advantage (see _Advantages_). If they answer incorrectly, nothing will happen.
-In all cases, each question asked once won't be asked again during the game.
-Once the number of questions chosen by the host for the qualifying round has been reached (without couting the bonus questions), the qualifying round is over.
+At the start of the game, a group is randomly drawn by the computer to choose a theme from those displayed on the screen. Once the theme has been chosen, the computer randomly chooses a question from the questions not yet asked in that theme, and asks it to all the groups, who answer on an answer sheet which they must drop into an urn at the end of each question before the answer is displayed.
+At the end of the three questions, the choice is between moving on to a new theme, taking a break or ending the game. If you choose to move on to a new theme, three questions will be asked on the theme selected by the group before another group is selected to choose a new theme. If a break is chosen, the user must enter the answers given by the groups in order to calculate the scores. When they want to resume the game, an intermediate ranking will be displayed on the screen before the game is resumed. If you choose to end the game, you'll have to enter the answers given by the groups in order to calculate the scores. Once the answers have been entered, the computer calculates the score for each group and displays the group rankings in the form of a horizontal bar chart.
 
-### Points calculation for the qualifying round
+### Points calculation
 
-After the qualifying round, the host has to enter the answers of each group inside the application.
+When the user wants to enter the answers given by the groups, he will have to enter the answers given by each group for each question.
 For the multiple choice questions and the open questions, the host only has to specify if the answer is correct or not.
 For the estimate questions, the host has to enter the answer given by the group and the computer will calculate the points earned by the group depending on the answer given and the correct answer.
 Once all the answers have been entered, the computer will calculate the points of every group and display the ranking of the qualifying round in the form of a horizontal bar chart.
-The 4 groups that have earned the most points will be qualified for the semi-finals.
-
-### Final rounds
-
-#### Semi-finals
-
-The 4 groups qualified are split into 2 semi-finals. The group that finished first in the qualifying round will face the group that finished fourth and the group that finished second will face the group that finished third.
-This round organization is still to be determined.
-
-#### Small final
-
-The 2 groups that lost their semi-final will face each other in the small final. The winner of this round will finish third.
-This round organization is still to be determined.
-
-#### Final
-
-The 2 groups that won their semi-final will face each other in the final. The winner of this round will finish first and the loser will finish second.
-This round organization is still to be determined.
 
 ## Advantages
 
-The advantages are bonuses that the groups can earn by correctly answering a bonus question. They can be used during the qualifying round.
+The advantages will be developed in the future. For now, they are not available.
+The advantages are bonuses that the groups can earn by correctly answering a bonus question.
 The available advantages are the following:
 
 | Advantage | Description                                                                                                                                               |
