@@ -62,7 +62,7 @@ exports.createQuestions = (req, res) => {
       }
     }
     pool.query(
-      "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         question.id,
         question.questionType,
@@ -72,6 +72,7 @@ exports.createQuestions = (req, res) => {
         question.points,
         choices,
         question.explanation || "",
+        question.imageName || "",
         Boolean(question.isBonus),
         question.gameId,
         question.isAsked,
@@ -194,6 +195,7 @@ exports.getRandomQuestionByTheme = (req, res) => {
                   points: question.points,
                   choices: question.choices,
                   explanation: question.explanation,
+                  imageName: question.image_name,
                 },
               });
             }
