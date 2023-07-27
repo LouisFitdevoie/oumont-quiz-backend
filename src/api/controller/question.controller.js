@@ -51,16 +51,6 @@ exports.createQuestions = (req, res) => {
 
   questionArray.forEach((question) => {
     let choices = "";
-    if (question.questionType == "multipleChoice") {
-      const choicesToAdd = question.choices;
-      for (let i = 0; i < choicesToAdd.length; i++) {
-        if (i == choicesToAdd.length - 1) {
-          choices += choicesToAdd[i];
-        } else {
-          choices += choicesToAdd[i] + "/";
-        }
-      }
-    }
     pool.query(
       "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
