@@ -138,7 +138,7 @@ describe("POST /questions", () => {
               "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0",
               "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0",
               "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1",
-              "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;",
+              "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;0",
             ],
           })
           .end((err, res) => {
@@ -147,6 +147,57 @@ describe("POST /questions", () => {
             res.body.message.should.be.eql("5 question(s) created");
             done();
           });
+      });
+  });
+
+  it("should return an error if the questions have already been created for this game", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questions")
+      .send({
+        gameId: gameIdCreated,
+        fileLines: [
+          "multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;;0",
+          "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0",
+          "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0",
+          "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1",
+          "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;0",
+        ],
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.status.should.be.eql(400);
+        res.body.should.have.property("error");
+        res.body.error.should.be.eql(
+          "All questions already exist for this game"
+        );
+        done();
+      });
+  });
+
+  it("should create only the questions that do not already exist", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questions")
+      .send({
+        gameId: gameIdCreated,
+        fileLines: [
+          "multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;;0",
+          "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0",
+          "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0",
+          "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1",
+          "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;0",
+          "open;Cinéma;Qui est le réalisateur du film Oppenheimer ?;Christopher Nolan;1;;C'est Christopher Nolan;;0",
+        ],
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.status.should.be.eql(201);
+        res.body.should.have.property("message");
+        res.body.message.should.be.eql(
+          "Only 1 question(s) created as 5 question(s) already exists for this game"
+        );
+        done();
       });
   });
 });
