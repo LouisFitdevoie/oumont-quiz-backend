@@ -134,16 +134,17 @@ describe("POST /questions", () => {
           .send({
             gameId: gameIdCreated,
             fileLines: [
-              "multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;0",
-              "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;0",
-              "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;0",
-              "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;1",
+              "multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;;0",
+              "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0",
+              "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0",
+              "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1",
+              "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;",
             ],
           })
           .end((err, res) => {
             res.should.be.a("object");
             res.body.should.have.property("message");
-            res.body.message.should.be.eql("4 question(s) created");
+            res.body.message.should.be.eql("5 question(s) created");
             done();
           });
       });

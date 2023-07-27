@@ -20,16 +20,18 @@ The questions to be asked during the game must be contained in a file. This file
 - `points`: The number of points the question is worth
 - `choices`: The 4 possible choices for the question if it's a multiple choice question (separated by `/`)
 - `explanation`: An explanation of the answer (optional)
+- `imageName`: The name of the image to be displayed with the question (optional). The image should be in the `public/images` folder.
 - `isBonus`: Indicates whether the question is a bonus question (0 = no, 1 = yes). If a question is a bonus question, it will not be counted in the final score, but the group will earn advantages during the game.
 
 Here's an example of a valid file:
 
 ```csv
-questionType;theme;question;answer;points;choices;explanation;isBonus
-multipleChoice;Riddle;What's the color of Henri IV's white horse?;white;1;white/black/red/green;;0
-open;Geography;What's the capital of Belgium?;Brussels;1;;That's Belgium's capital;0
-estimate;Space;How many kilometers separate the Earth from the Moon?;384400;1;;Moon is 384400km away from Earth;0
-multipleChoice;Village culture;What's Choco's favorite food?;Lasagne;0;Lasagne/Croquettes/Chocolate/Apples;;Choco really likes lasagne;1
+questionType;theme;question;answer;points;choices;explanation;imageName;isBonus
+multipleChoice;Riddle;What's the color of Henri IV's white horse?;white;1;white/black/red/green;;;0
+open;Geography;What's the capital of Belgium?;Brussels;1;;That's Belgium's capital;;0
+estimate;Space;How many kilometers separate the Earth from the Moon?;384400;1;;Moon is 384400km away from Earth;;0
+multipleChoice;Village culture;What's Choco's favorite food?;Lasagne;0;Lasagne/Croquettes/Chocolate/Apples;;Choco really likes lasagne;;1
+open;Music;What's the name of this singer ?;Rick Astley;1;;It's Rick Astley;example.jpg;0
 ```
 
 Several types of questions are available:

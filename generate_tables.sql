@@ -37,6 +37,7 @@ CREATE TABLE `Questions` (
   `points` INT NOT NULL,
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
+  `image_name` VARCHAR(255) NOT NULL,
   `is_bonus` BOOLEAN NOT NULL,
   `game_id` VARCHAR(255) NOT NULL,
   `is_asked` BOOLEAN NOT NULL
@@ -84,6 +85,7 @@ CREATE TABLE `Questions` (
   `points` INT NOT NULL,
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
+  `image_name` VARCHAR(255) NOT NULL,
   `is_bonus` BOOLEAN NOT NULL,
   `game_id` VARCHAR(255) NOT NULL,
   `is_asked` BOOLEAN NOT NULL
@@ -131,6 +133,7 @@ CREATE TABLE `Questions` (
   `points` INT NOT NULL,
   `choices` VARCHAR(255) NOT NULL,
   `explanation` TEXT,
+  `image_name` VARCHAR(255) NOT NULL,
   `is_bonus` BOOLEAN NOT NULL,
   `game_id` VARCHAR(255) NOT NULL,
   `is_asked` BOOLEAN NOT NULL
