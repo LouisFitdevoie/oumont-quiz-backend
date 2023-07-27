@@ -141,7 +141,7 @@ exports.getRandomThemes = (req, res) => {
   }
 
   pool.query(
-    "SELECT DISTINCT theme FROM Questions WHERE game_id = ?",
+    "SELECT DISTINCT theme FROM Questions WHERE game_id = ? AND is_asked = false",
     [dataReceived.gameId],
     (error, results) => {
       if (error) {
@@ -150,14 +150,17 @@ exports.getRandomThemes = (req, res) => {
       } else if (results.length == 0) {
         res.status(400).send({ error: "No questions found for this game" });
         return;
+      } else if (results.length < numberOfRandomThemes) {
+        let themes = [];
+        results.forEach((result) => {
+          themes.push(result.theme);
+        });
+        res.send({ message: "Themes randomly selected", themes: themes });
       } else {
         let randomThemes = [];
 
         for (let i = 0; i < numberOfRandomThemes; i++) {
           let randomIndex = Math.floor(Math.random() * results.length);
-          //*****
-          //TODO - Check if questions are available for this theme before pushing it
-          //*****
           randomThemes.push(results[randomIndex].theme);
           results.splice(randomIndex, 1);
         }
