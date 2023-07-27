@@ -12,7 +12,8 @@ class Question {
     this.points = parseInt(line[4]);
     this.choices = line[5].split("/"); // For the DB, it will be a string like "1/2/3/4"
     this.explanation = line[6];
-    this.isBonus = new Boolean(line[7]);
+    this.imageName = line[7];
+    this.isBonus = new Boolean(line[8]);
     this.gameId = gameId;
     this.isAsked = false;
   }
