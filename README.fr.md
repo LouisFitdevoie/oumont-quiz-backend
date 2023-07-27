@@ -20,16 +20,18 @@ Les questions qui seront posées au cours de la partie devront être contenues d
 - `points` : Le nombre de points que vaut la question
 - `choices` : Les 4 choix possibles pour la question si c'est une question à choix multiples (séparés par des `/`)
 - `explanation` : Une explication sur la réponse (optionnelle)
+- `imageName` : Le nom de l'image à afficher avec la question (optionnel). L'image doit se trouver dans le dossier `public/images`.
 - `isBonus` : Indique si la question est une question bonus (0 = non, 1 = oui). Si une question est une question bonus, elle ne sera pas comptabilisée dans le score final, mais permettra de faire gagner des avantages au cours de la partie
 
 Voici un exemple de fichier valide :
 
 ```csv
 questionType;theme;question;answer;points;choices;explanation;isBonus
-multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;0
-open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;0
-estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;0
-multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;1
+multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;;0
+open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0
+estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0
+multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1
+open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;
 ```
 
 Plusieurs types de questions sont disponibles :
