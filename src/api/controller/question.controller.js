@@ -49,39 +49,80 @@ exports.createQuestions = (req, res) => {
     questionArray.push(new Question(line, gameId));
   });
 
+  let questionAlreadyExisting = 0;
+  let promises = [];
   questionArray.forEach((question) => {
-    let choices = "";
-    pool.query(
-      "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [
-        question.id,
-        question.questionType,
-        question.theme,
-        question.question,
-        question.answer,
-        question.points,
-        choices,
-        question.explanation || "",
-        question.imageName || "",
-        Boolean(question.isBonus),
-        question.gameId,
-        question.isAsked,
-      ],
-      (error, results) => {
-        if (error) {
-          console.error(error);
-          res.status(500).send({
-            error: "Error while creating the questions",
-          });
-          return;
+    const promise = new Promise((resolve, reject) => {
+      pool.query(
+        "SELECT * FROM Questions WHERE game_id = ? AND question = ?",
+        [question.gameId, question.question],
+        (error, results) => {
+          if (error) {
+            console.error(error);
+            reject(error);
+          } else if (results.length > 0) {
+            // Do nothing
+            questionAlreadyExisting++;
+            resolve();
+          } else {
+            pool.query(
+              "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              [
+                question.id,
+                question.questionType,
+                question.theme,
+                question.question,
+                question.answer,
+                question.points,
+                question.choices,
+                question.explanation || "",
+                question.imageName || "",
+                Boolean(question.isBonus),
+                question.gameId,
+                question.isAsked,
+              ],
+              (error, results) => {
+                if (error) {
+                  console.error(error);
+                  reject(error);
+                } else {
+                  resolve();
+                }
+              }
+            );
+          }
         }
-      }
-    );
+      );
+    });
+
+    promises.push(promise);
   });
 
-  res.status(200).send({
-    message: `${questionArray.length} question(s) created`,
-  });
+  Promise.all(promises)
+    .then(() => {
+      if (questionAlreadyExisting == 0) {
+        res.status(201).send({
+          message: `${questionArray.length} question(s) created`,
+        });
+        return;
+      } else if (questionAlreadyExisting == questionArray.length) {
+        res.status(400).send({
+          error: "All questions already exist for this game",
+        });
+        return;
+      } else {
+        res.status(201).send({
+          message: `Only ${
+            questionArray.length - questionAlreadyExisting
+          } question(s) created as ${questionAlreadyExisting} question(s) already exists for this game`,
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).send({
+        error: "Error while creating the questions",
+      });
+    });
 };
 
 exports.getRandomThemes = (req, res) => {
