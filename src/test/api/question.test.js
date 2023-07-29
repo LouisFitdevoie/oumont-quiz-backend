@@ -478,6 +478,93 @@ describe("GET /answer", () => {
   });
 });
 
+describe("GET /questionImage", () => {
+  it("should return an error if the imageName is not provided", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Image name must be provided");
+        done();
+      });
+  });
+
+  it("should return an error if the imageName is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .send({
+        imageName: "",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Image name cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the imageName does not contain a .", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .send({
+        imageName: "123",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Image name is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the imageName contain ..", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .send({
+        imageName: "123..456",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Image name is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the extension is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .send({
+        imageName: "123456789012345678901234567890123456.pdf",
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        done();
+      });
+  });
+
+  it("should return the image", (done) => {
+    chai
+      .request(serverAddress)
+      .get(baseURL + "/questionImage")
+      .send({
+        imageName: "example.jpg",
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.have.header("content-type", "image/jpeg");
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;
