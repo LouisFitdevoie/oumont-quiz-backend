@@ -1,4 +1,5 @@
 const uuid = require("uuid");
+const path = require("path");
 
 const database = require("../../database.js");
 const Question = require("../model/Question.js");
@@ -273,6 +274,48 @@ exports.getAnswer = (req, res) => {
           choices: question.choices,
           points: question.points,
         });
+      }
+    }
+  );
+};
+
+exports.getQuestionImage = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.hasOwnProperty("imageName") == false) {
+    res.status(400).send({ error: "Image name must be provided" });
+    return;
+  } else if (dataReceived.imageName == "") {
+    res.status(400).send({ error: "Image name cannot be empty" });
+    return;
+  } else if (!dataReceived.imageName.includes(".")) {
+    res.status(400).send({ error: "Image name is not valid" });
+    return;
+  } else if (dataReceived.imageName.includes("..")) {
+    res.status(400).send({ error: "Image name is not valid" });
+    return;
+  }
+
+  const imageName = dataReceived.imageName;
+  const extensionsAllowes = ["jpg", "png", "gif", "jpeg"];
+
+  if (
+    !extensionsAllowes.includes(
+      imageName.split(".")[imageName.split(".").length - 1]
+    )
+  ) {
+    res.status(400).send({ error: "Image name is not valid" });
+    return;
+  }
+
+  res.sendFile(
+    imageName,
+    {
+      root: path.join(__dirname, "../../../public/images"),
+    },
+    (err) => {
+      if (err) {
+        console.log(err);
       }
     }
   );

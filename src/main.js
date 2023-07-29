@@ -108,4 +108,8 @@ exports.startServer = () => {
   app.get(baseURL + "/answer", (req, res) => {
     questionController.getAnswer(req, res);
   });
+
+  app.get(baseURL + "/questionImage", (req, res) => {
+    questionController.getQuestionImage(req, res);
+  });
 };
