@@ -7,12 +7,6 @@ USE `oumont_quizz`;
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `qualifying_number_questions` INT NOT NULL,
-  `bonus_questions` BOOLEAN NOT NULL,
-  `bonus_questions_number` INT NOT NULL,
-  `semi_finals_number_questions` INT NOT NULL,
-  `small_final_number_questions` INT NOT NULL,
-  `final_number_questions` INT NOT NULL,
   `time_to_answer` VARCHAR(255) NOT NULL,
   `persons_per_group` INT NOT NULL,
   `created_at` DATETIME NOT NULL
@@ -55,12 +49,6 @@ USE `oumont_quizz_test`;
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `qualifying_number_questions` INT NOT NULL,
-  `bonus_questions` BOOLEAN NOT NULL,
-  `bonus_questions_number` INT NOT NULL,
-  `semi_finals_number_questions` INT NOT NULL,
-  `small_final_number_questions` INT NOT NULL,
-  `final_number_questions` INT NOT NULL,
   `time_to_answer` VARCHAR(255) NOT NULL,
   `persons_per_group` INT NOT NULL,
   `created_at` DATETIME NOT NULL
@@ -103,12 +91,6 @@ USE `oumont_quizz_dev`;
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `qualifying_number_questions` INT NOT NULL,
-  `bonus_questions` BOOLEAN NOT NULL,
-  `bonus_questions_number` INT NOT NULL,
-  `semi_finals_number_questions` INT NOT NULL,
-  `small_final_number_questions` INT NOT NULL,
-  `final_number_questions` INT NOT NULL,
   `time_to_answer` VARCHAR(255) NOT NULL,
   `persons_per_group` INT NOT NULL,
   `created_at` DATETIME NOT NULL
