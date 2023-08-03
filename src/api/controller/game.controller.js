@@ -6,7 +6,7 @@ const pool = database.pool;
 
 exports.createGame = (req, res) => {
   const dataReceived = req.body;
-  const gameToCreate = new Game("", 0, false, 0, 0, 0, 0, [0, 0, 0]);
+  const gameToCreate = new Game("", [0, 0, 0]);
 
   if (dataReceived.hasOwnProperty("name") == false) {
     res.status(400).send({
@@ -15,121 +15,6 @@ exports.createGame = (req, res) => {
     return;
   }
   gameToCreate.name = dataReceived.name.trim();
-
-  if (dataReceived.hasOwnProperty("qualifyingNumberQuestions") == false) {
-    res.status(400).send({
-      error: "Missing the number of qualifying questions",
-    });
-    return;
-  }
-
-  const qualifyingNumberQuestions = parseInt(
-    dataReceived.qualifyingNumberQuestions
-  );
-  if (
-    !isNaN(qualifyingNumberQuestions) &&
-    Number.isInteger(qualifyingNumberQuestions)
-  ) {
-    gameToCreate.qualifyingNumberQuestions = qualifyingNumberQuestions;
-  } else {
-    res.status(400).send({
-      error: "The number of qualifying questions must be an integer",
-    });
-    return;
-  }
-
-  if (dataReceived.hasOwnProperty("bonusQuestions") == false) {
-    res.status(400).send({
-      error: "Missing the bonus questions",
-    });
-    return;
-  } else if (dataReceived.bonusQuestions == true) {
-    gameToCreate.bonusQuestions = true;
-    if (dataReceived.hasOwnProperty("bonusQuestionsNumber") == false) {
-      res.status(400).send({
-        error: "Missing the number of bonus questions",
-      });
-      return;
-    }
-    const bonusQuestionsNumber = parseInt(dataReceived.bonusQuestionsNumber);
-    if (
-      !isNaN(bonusQuestionsNumber) &&
-      Number.isInteger(bonusQuestionsNumber)
-    ) {
-      gameToCreate.bonusQuestionsNumber = bonusQuestionsNumber;
-    } else {
-      res.status(400).send({
-        error: "The number of bonus questions must be an integer",
-      });
-      return;
-    }
-  } else if (dataReceived.bonusQuestions == false) {
-    gameToCreate.bonusQuestions = false;
-    gameToCreate.bonusQuestionsNumber = 0;
-  } else {
-    res.status(400).send({
-      error: "The bonus questions must be a boolean",
-    });
-    return;
-  }
-
-  if (dataReceived.hasOwnProperty("semiFinalsNumberQuestions") == false) {
-    res.status(400).send({
-      error: "Missing the number of semi-finals questions",
-    });
-    return;
-  }
-  const semiFinalsNumberQuestions = parseInt(
-    dataReceived.semiFinalsNumberQuestions
-  );
-  if (
-    !isNaN(semiFinalsNumberQuestions) &&
-    Number.isInteger(semiFinalsNumberQuestions)
-  ) {
-    gameToCreate.semiFinalsNumberQuestions = semiFinalsNumberQuestions;
-  } else {
-    res.status(400).send({
-      error: "The number of semi-finals questions must be an integer",
-    });
-    return;
-  }
-
-  if (dataReceived.hasOwnProperty("smallFinalNumberQuestions") == false) {
-    res.status(400).send({
-      error: "Missing the number of small final questions",
-    });
-    return;
-  }
-  const smallFinalNumberQuestions = parseInt(
-    dataReceived.smallFinalNumberQuestions
-  );
-  if (
-    !isNaN(smallFinalNumberQuestions) &&
-    Number.isInteger(smallFinalNumberQuestions)
-  ) {
-    gameToCreate.smallFinalNumberQuestions = smallFinalNumberQuestions;
-  } else {
-    res.status(400).send({
-      error: "The number of small final questions must be an integer",
-    });
-    return;
-  }
-
-  if (dataReceived.hasOwnProperty("finalNumberQuestions") == false) {
-    res.status(400).send({
-      error: "Missing the number of final questions",
-    });
-    return;
-  }
-  const finalNumberQuestions = parseInt(dataReceived.finalNumberQuestions);
-  if (!isNaN(finalNumberQuestions) && Number.isInteger(finalNumberQuestions)) {
-    gameToCreate.finalNumberQuestions = finalNumberQuestions;
-  } else {
-    res.status(400).send({
-      error: "The number of final questions must be an integer",
-    });
-    return;
-  }
 
   if (dataReceived.hasOwnProperty("timeToAnswerQCM") == false) {
     res.status(400).send({
@@ -181,16 +66,10 @@ exports.createGame = (req, res) => {
   }
 
   pool.query(
-    "INSERT INTO Games (id, name, qualifying_number_questions, bonus_questions, bonus_questions_number, semi_finals_number_questions, small_final_number_questions, final_number_questions, time_to_answer, persons_per_group, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO Games (id, name, time_to_answer, persons_per_group, created_at) VALUES (?, ?, ?, ?, ?)",
     [
       gameToCreate.id,
       gameToCreate.name,
-      gameToCreate.qualifyingNumberQuestions,
-      gameToCreate.bonusQuestions,
-      gameToCreate.bonusQuestionsNumber,
-      gameToCreate.semiFinalsNumberQuestions,
-      gameToCreate.smallFinalNumberQuestions,
-      gameToCreate.finalNumberQuestions,
       gameToCreate.timeToAnswer,
       gameToCreate.personsPerGroup,
       gameToCreate.created_at,
@@ -240,12 +119,6 @@ exports.getGameById = (req, res) => {
         game: {
           id: results[0].id,
           name: results[0].name,
-          qualifyingNumberQuestions: results[0].qualifying_number_questions,
-          bonusQuestions: Boolean(results[0].bonus_questions),
-          bonusQuestionsNumber: results[0].bonus_questions_number,
-          semiFinalsNumberQuestions: results[0].semi_finals_number_questions,
-          smallFinalNumberQuestions: results[0].small_final_number_questions,
-          finalNumberQuestions: results[0].final_number_questions,
           timeToAnswer: results[0].time_to_answer,
           personsPerGroup: results[0].persons_per_group,
           createdAt: results[0].created_at,
