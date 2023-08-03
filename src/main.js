@@ -1,6 +1,7 @@
 require("dotenv").config();
 const mysql = require("mysql");
 const express = require("express");
+const cors = require("cors");
 
 const gameController = require("./api/controller/game.controller.js");
 const groupController = require("./api/controller/group.controller.js");
@@ -51,6 +52,7 @@ exports.startServer = () => {
   });
 
   app.use(express.json());
+  app.use(cors({ origin: "http://localhost:3000" }));
 
   //***** GAMES *****//
 
