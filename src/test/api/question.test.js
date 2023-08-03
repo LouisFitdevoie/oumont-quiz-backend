@@ -112,11 +112,6 @@ describe("POST /questions", () => {
       .post(baseURL + "/game")
       .send({
         name: "Test",
-        qualifyingNumberQuestions: 10,
-        bonusQuestions: false,
-        semiFinalsNumberQuestions: 10,
-        smallFinalNumberQuestions: 10,
-        finalNumberQuestions: 10,
         timeToAnswerQCM: 10,
         timeToAnswerOpen: 10,
         timeToAnswerEstimate: 10,
