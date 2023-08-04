@@ -106,8 +106,9 @@ exports.getAllGroupsForGame = (req, res) => {
       (err, result) => {
         if (err) throw err;
         if (result.length == 0) {
-          res.status(404).send({
-            error: "No groups found for this game",
+          res.status(200).send({
+            message: "No groups found for this game",
+            groups: [],
           });
           return;
         } else {

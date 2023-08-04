@@ -56,9 +56,13 @@ describe("GET /group?gameId=:gameId without groups in the DB", () => {
       .request(serverAddress)
       .get(baseURL + "/group?gameId=00000000-0000-0000-0000-000000000000")
       .end((err, res) => {
+        console.log(res.body);
         res.should.be.a("object");
-        res.body.should.have.property("error");
-        res.body.error.should.be.eql("No groups found for this game");
+        res.body.should.have.property("message");
+        res.body.should.have.property("groups");
+        res.body.message.should.be.eql("No groups found for this game");
+        res.body.groups.should.be.a("array");
+        res.body.groups.length.should.be.eql(0);
         done();
       });
   });
