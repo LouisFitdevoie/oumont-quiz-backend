@@ -93,6 +93,14 @@ exports.startServer = () => {
     groupController.updateQualifiedStatusForGroup(req, res);
   });
 
+  app.put(baseURL + "/group/updateName", (req, res) => {
+    groupController.updateGroupName(req, res);
+  });
+
+  app.delete(baseURL + "/group", (req, res) => {
+    groupController.deleteGroup(req, res);
+  });
+
   //***** QUESTIONS *****//
 
   app.post(baseURL + "/questions", (req, res) => {
