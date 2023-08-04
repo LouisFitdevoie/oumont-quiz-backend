@@ -314,3 +314,115 @@ exports.updateQualifiedStatusForGroup = (req, res) => {
     );
   }
 };
+
+exports.updateGroupName = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.hasOwnProperty("groupId") == false) {
+    res.status(400).send({
+      error: "Missing group id",
+    });
+    return;
+  } else if (dataReceived.groupId == "") {
+    res.status(400).send({
+      error: "Group id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(dataReceived.groupId)) {
+    res.status(400).send({
+      error: "Group id is not valid",
+    });
+    return;
+  }
+
+  if (dataReceived.hasOwnProperty("name") == false) {
+    res.status(400).send({
+      error: "Missing group name",
+    });
+    return;
+  } else if (dataReceived.name == "") {
+    res.status(400).send({
+      error: "Group name cannot be empty",
+    });
+    return;
+  }
+
+  pool.query(
+    "SELECT id FROM `Groups` WHERE id = ?",
+    [dataReceived.groupId],
+    (err, result) => {
+      if (err) throw err;
+      if (result.length == 0) {
+        res.status(404).send({
+          error: "Group not found",
+        });
+        return;
+      }
+      pool.query(
+        "UPDATE `Groups` SET name = ? WHERE id = ?",
+        [dataReceived.name, dataReceived.groupId],
+        (err, result) => {
+          if (err) {
+            res.status(500).send({
+              error: "Error while updating the group name",
+            });
+            return;
+          }
+          res.status(200).send({
+            message: "Group name successfully updated",
+          });
+        }
+      );
+    }
+  );
+};
+
+exports.deleteGroup = (req, res) => {
+  const dataReceived = req.body;
+
+  if (dataReceived.hasOwnProperty("groupId") == false) {
+    res.status(400).send({
+      error: "Missing group id",
+    });
+    return;
+  } else if (dataReceived.groupId == "") {
+    res.status(400).send({
+      error: "Group id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(dataReceived.groupId)) {
+    res.status(400).send({
+      error: "Group id is not valid",
+    });
+    return;
+  }
+
+  pool.query(
+    "SELECT id FROM `Groups` WHERE id = ?",
+    [dataReceived.groupId],
+    (err, result) => {
+      if (err) throw err;
+      if (result.length == 0) {
+        res.status(404).send({
+          error: "Group not found",
+        });
+        return;
+      }
+      pool.query(
+        "DELETE FROM `Groups` WHERE id = ?",
+        [dataReceived.groupId],
+        (err, result) => {
+          if (err) {
+            res.status(500).send({
+              error: "Error while deleting the group",
+            });
+            return;
+          }
+          res.status(200).send({
+            message: "Group successfully deleted",
+          });
+        }
+      );
+    }
+  );
+};
