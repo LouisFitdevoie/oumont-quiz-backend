@@ -127,7 +127,7 @@ exports.createQuestions = (req, res) => {
 };
 
 exports.getRandomThemes = (req, res) => {
-  const dataReceived = req.body;
+  const dataReceived = req.query;
   const numberOfRandomThemes = 2;
 
   if (dataReceived.hasOwnProperty("gameId") == false) {
