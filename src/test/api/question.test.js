@@ -213,10 +213,7 @@ describe("GET /randomThemes", () => {
   it("should return an error if the game ID is empty", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomThemes")
-      .send({
-        gameId: "",
-      })
+      .get(baseURL + "/randomThemes?gameId=")
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -228,10 +225,7 @@ describe("GET /randomThemes", () => {
   it("should return an error if the game ID is not valid", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomThemes")
-      .send({
-        gameId: "123",
-      })
+      .get(baseURL + "/randomThemes?gameId=123")
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -243,10 +237,9 @@ describe("GET /randomThemes", () => {
   it("should return an error if no questions are associated to this game id", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomThemes")
-      .send({
-        gameId: "00000000-0000-0000-0000-000000000000",
-      })
+      .get(
+        baseURL + "/randomThemes?gameId=00000000-0000-0000-0000-000000000000"
+      )
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -258,10 +251,7 @@ describe("GET /randomThemes", () => {
   it("should return an array with two random themes", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomThemes")
-      .send({
-        gameId: gameIdCreated,
-      })
+      .get(baseURL + "/randomThemes?gameId=" + gameIdCreated)
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("message");
