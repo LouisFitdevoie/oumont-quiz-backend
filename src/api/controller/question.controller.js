@@ -173,7 +173,7 @@ exports.getRandomThemes = (req, res) => {
 };
 
 exports.getRandomQuestionByTheme = (req, res) => {
-  const dataReceived = req.body;
+  const dataReceived = req.query;
 
   if (dataReceived.hasOwnProperty("gameId") == false) {
     res.status(400).send({ error: "Game id must be provided" });

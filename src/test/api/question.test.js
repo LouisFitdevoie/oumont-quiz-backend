@@ -280,10 +280,7 @@ describe("GET /randomQuestion", () => {
   it("should return an error if the game ID is empty", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: "",
-      })
+      .get(baseURL + "/randomQuestion?gameId=")
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -295,10 +292,7 @@ describe("GET /randomQuestion", () => {
   it("should return an error if the game ID is not valid", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: "123",
-      })
+      .get(baseURL + "/randomQuestion?gameId=123")
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -310,10 +304,7 @@ describe("GET /randomQuestion", () => {
   it("should return an error if the theme is not provided", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: gameIdCreated,
-      })
+      .get(baseURL + "/randomQuestion?gameId=" + gameIdCreated)
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -325,11 +316,7 @@ describe("GET /randomQuestion", () => {
   it("should return an error if the theme is empty", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: gameIdCreated,
-        theme: "",
-      })
+      .get(baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=")
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
@@ -341,11 +328,12 @@ describe("GET /randomQuestion", () => {
   it("should return a question if the theme is valid", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: gameIdCreated,
-        theme: "Géographie",
-      })
+      .get(
+        baseURL +
+          "/randomQuestion?gameId=" +
+          gameIdCreated +
+          "&theme=Géographie"
+      )
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("message");
@@ -367,11 +355,12 @@ describe("GET /randomQuestion", () => {
   it("should return an error if no questions are found for this theme", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/randomQuestion")
-      .send({
-        gameId: gameIdCreated,
-        theme: "Géographie",
-      })
+      .get(
+        baseURL +
+          "/randomQuestion?gameId=" +
+          gameIdCreated +
+          "&theme=Géographie"
+      )
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
