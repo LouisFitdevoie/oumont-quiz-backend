@@ -142,7 +142,7 @@ exports.getRandomThemes = (req, res) => {
   }
 
   pool.query(
-    "SELECT DISTINCT theme FROM Questions WHERE game_id = ? AND is_asked = false",
+    "SELECT theme FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
     [dataReceived.gameId],
     (error, results) => {
       if (error) {
