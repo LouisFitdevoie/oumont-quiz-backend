@@ -179,10 +179,14 @@ describe("POST /questions", () => {
         fileLines: [
           "multipleChoice;Devinette;Quelle est la couleur du cheval blanc d'Henri IV ?;blanc;1;blanc/noir/rouge/vert;;;0",
           "open;Géographie;Quelle est la capitale de la Belgique ?;Bruxelles;1;;C'est la capitale de la Belgique;;0",
+          "open;Géographie;Quelle est la capitale de la France ?;Paris;1;;C'est la capitale de la France;;0",
+          "open;Géographie;Quelle est la capitale de l'Allemagne ?;Berlin;1;;C'est la capitale de l'Allemagne;;0",
           "estimate;Espace;A combien de kilomètres de la Terre se trouve la Lune ?;384400;1;;La lune se trouve à 384400 km de la terre;;0",
           "multipleChoice;Culture village;Quelle est la nourriture préférée de Choco?;Les lasagnes;0;Les lasagnes/Les croquettes/Le chocolat/Les pommes;;Choco adore les lasagnes;;1",
           "open;Musique;Quel est le nom de ce chanteur ?;Rick Astley;1;;C'est Rick Astley;example.jpg;0",
           "open;Cinéma;Qui est le réalisateur du film Oppenheimer ?;Christopher Nolan;1;;C'est Christopher Nolan;;0",
+          "open;Cinéma;Qui est le réalisateur du film Interstellar ?;Christopher Nolan;1;;C'est Christopher Nolan;;0",
+          "open;Cinéma;Qui est le réalisateur du film Inception ?;Christopher Nolan;1;;C'est Christopher Nolan;;0",
         ],
       })
       .end((err, res) => {
@@ -190,7 +194,7 @@ describe("POST /questions", () => {
         res.status.should.be.eql(201);
         res.body.should.have.property("message");
         res.body.message.should.be.eql(
-          "Only 1 question(s) created as 5 question(s) already exists for this game"
+          "Only 5 question(s) created as 5 question(s) already exists for this game"
         );
         done();
       });
@@ -329,10 +333,7 @@ describe("GET /randomQuestion", () => {
     chai
       .request(serverAddress)
       .get(
-        baseURL +
-          "/randomQuestion?gameId=" +
-          gameIdCreated +
-          "&theme=Géographie"
+        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace"
       )
       .end((err, res) => {
         res.should.be.a("object");
@@ -356,10 +357,7 @@ describe("GET /randomQuestion", () => {
     chai
       .request(serverAddress)
       .get(
-        baseURL +
-          "/randomQuestion?gameId=" +
-          gameIdCreated +
-          "&theme=Géographie"
+        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace"
       )
       .end((err, res) => {
         res.should.be.a("object");
@@ -443,8 +441,10 @@ describe("GET /answer", () => {
         res.body.should.have.property("choices");
         res.body.should.have.property("points");
         res.body.message.should.be.eql("Answer retrieved");
-        res.body.answer.should.be.eql("Bruxelles");
-        res.body.explanation.should.be.eql("C'est la capitale de la Belgique");
+        res.body.answer.should.be.eql("384400");
+        res.body.explanation.should.be.eql(
+          "La lune se trouve à 384400 km de la terre"
+        );
         res.body.choices.should.be.eql("");
         res.body.points.should.be.eql(1);
         done();
