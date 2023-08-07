@@ -320,3 +320,47 @@ exports.getQuestionImage = (req, res) => {
     }
   );
 };
+
+exports.getQuestionById = (req, res) => {
+  const dataReceived = req.params;
+
+  if (dataReceived.hasOwnProperty("questionId") == false) {
+    res.status(400).send({ error: "Question id must be provided" });
+    return;
+  } else if (dataReceived.questionId == "") {
+    res.status(400).send({ error: "Question id cannot be empty" });
+    return;
+  } else if (!uuid.validate(dataReceived.questionId)) {
+    res.status(400).send({ error: "Question id is not valid" });
+    return;
+  }
+
+  pool.query(
+    "SELECT * FROM Questions WHERE id = ?",
+    [dataReceived.questionId],
+    (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error while getting the question" });
+        return;
+      } else if (results.length == 0) {
+        res.status(400).send({ error: "No question found with this id" });
+        return;
+      } else {
+        let question = results[0];
+        res.send({
+          message: "Question retrieved",
+          question: {
+            id: question.id,
+            questionType: question.question_type,
+            question: question.question,
+            answer: question.answer,
+            points: question.points,
+            choices: question.choices,
+            explanation: question.explanation,
+            imageName: question.image_name,
+          },
+        });
+      }
+    }
+  );
+};
