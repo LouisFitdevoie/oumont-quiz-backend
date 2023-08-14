@@ -280,7 +280,7 @@ exports.getAnswer = (req, res) => {
 };
 
 exports.getQuestionImage = (req, res) => {
-  const dataReceived = req.body;
+  const dataReceived = req.query;
 
   if (dataReceived.hasOwnProperty("imageName") == false) {
     res.status(400).send({ error: "Image name must be provided" });
