@@ -1,5 +1,5 @@
 {
-  "name": "oumont-quizz",
+  "name": "oumont-quiz",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LouisFitdevoie/oumont-quizz.git"
+    "url": "git+ssh://git@github.com/LouisFitdevoie/oumont-quiz.git"
   },
   "author": "Louis Fitdevoie",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LouisFitdevoie/oumont-quizz/issues"
+    "url": "https://github.com/LouisFitdevoie/oumont-quiz/issues"
   },
-  "homepage": "https://github.com/LouisFitdevoie/oumont-quizz#readme",
+  "homepage": "https://github.com/LouisFitdevoie/oumont-quiz#readme",
   "dependencies": {
     "chai": "^4.3.7",
     "chai-http": "^4.4.0",
@@ -29,6 +29,7 @@
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "mysql": "^2.18.1",
+    "mysql2": "^3.6.0",
     "nodemon": "^2.0.22",
     "uuid": "^9.0.0"
   }
