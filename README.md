@@ -1,11 +1,11 @@
 [![en](https://img.shields.io/badge/language-english-brightgreen)](./README.md)
 [![fr](https://img.shields.io/badge/langue-français-red)](./README.fr.md)
 
-# Oumont Quizz
+# Oumont Quiz
 
 ## Description
 
-Oumont Quizz is a web application for creating quizzes to be played by groups in a room during events.
+Oumont Quiz is a web application for creating quizes to be played by groups in a room during events.
 
 ## Game flow
 

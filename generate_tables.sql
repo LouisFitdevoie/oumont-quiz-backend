@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `oumont_quizz`;
+DROP DATABASE IF EXISTS `oumont_quiz`;
 
-CREATE DATABASE `oumont_quizz`;
+CREATE DATABASE `oumont_quiz`;
 
-USE `oumont_quizz`;
+USE `oumont_quiz`;
 
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
@@ -40,11 +40,11 @@ CREATE TABLE `Questions` (
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
 ALTER TABLE `Questions` ADD CONSTRAINT `fk_game_id_questions` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
 
-DROP DATABASE IF EXISTS `oumont_quizz_test`;
+DROP DATABASE IF EXISTS `oumont_quiz_test`;
 
-CREATE DATABASE `oumont_quizz_test`;
+CREATE DATABASE `oumont_quiz_test`;
 
-USE `oumont_quizz_test`;
+USE `oumont_quiz_test`;
 
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
@@ -82,11 +82,11 @@ CREATE TABLE `Questions` (
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups_test` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
 ALTER TABLE `Questions` ADD CONSTRAINT `fk_game_id_questions_test` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
 
-DROP DATABASE IF EXISTS `oumont_quizz_dev`;
+DROP DATABASE IF EXISTS `oumont_quiz_dev`;
 
-CREATE DATABASE `oumont_quizz_dev`;
+CREATE DATABASE `oumont_quiz_dev`;
 
-USE `oumont_quizz_dev`;
+USE `oumont_quiz_dev`;
 
 CREATE TABLE `Games` (
   `id` VARCHAR(255) PRIMARY KEY,
