@@ -126,4 +126,8 @@ exports.startServer = () => {
   app.get(baseURL + "/question/:questionId", (req, res) => {
     questionController.getQuestionById(req, res);
   });
+
+  app.get(baseURL + "/questions", (req, res) => {
+    questionController.getAllQuestions(req, res);
+  });
 };
