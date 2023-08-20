@@ -247,7 +247,7 @@ describe("GET /randomThemes", () => {
       .end((err, res) => {
         res.should.be.a("object");
         res.body.should.have.property("error");
-        res.body.error.should.be.eql("No questions found for this game");
+        res.body.error.should.be.eql("No game found with this id");
         done();
       });
   });
