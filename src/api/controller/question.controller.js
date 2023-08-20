@@ -139,37 +139,62 @@ exports.getRandomThemes = (req, res) => {
   } else if (!uuid.validate(dataReceived.gameId)) {
     res.status(400).send({ error: "Game id is not valid" });
     return;
-  }
+  } else {
+    pool.query(
+      "SELECT * FROM Games WHERE id = ?",
+      [dataReceived.gameId],
+      (error, results) => {
+        if (error) {
+          res.status(500).send({ error: "Error while getting the game" });
+          return;
+        } else if (results.length == 0) {
+          res.status(400).send({ error: "No game found with this id" });
+          return;
+        } else {
+          pool.query(
+            "SELECT theme FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
+            [dataReceived.gameId],
+            (error, results) => {
+              if (error) {
+                res
+                  .status(500)
+                  .send({ error: "Error while getting the themes" });
+                return;
+              } else if (results.length == 0) {
+                res.send({
+                  message: "No themes found for this game",
+                  themes: [],
+                });
+                return;
+              } else if (results.length < numberOfRandomThemes) {
+                let themes = [];
+                results.forEach((result) => {
+                  themes.push(result.theme);
+                });
+                res.send({
+                  message: "Themes randomly selected",
+                  themes: themes,
+                });
+              } else {
+                let randomThemes = [];
 
-  pool.query(
-    "SELECT theme FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
-    [dataReceived.gameId],
-    (error, results) => {
-      if (error) {
-        res.status(500).send({ error: "Error while getting the themes" });
-        return;
-      } else if (results.length == 0) {
-        res.status(400).send({ error: "No questions found for this game" });
-        return;
-      } else if (results.length < numberOfRandomThemes) {
-        let themes = [];
-        results.forEach((result) => {
-          themes.push(result.theme);
-        });
-        res.send({ message: "Themes randomly selected", themes: themes });
-      } else {
-        let randomThemes = [];
+                for (let i = 0; i < numberOfRandomThemes; i++) {
+                  let randomIndex = Math.floor(Math.random() * results.length);
+                  randomThemes.push(results[randomIndex].theme);
+                  results.splice(randomIndex, 1);
+                }
 
-        for (let i = 0; i < numberOfRandomThemes; i++) {
-          let randomIndex = Math.floor(Math.random() * results.length);
-          randomThemes.push(results[randomIndex].theme);
-          results.splice(randomIndex, 1);
+                res.send({
+                  message: "Themes randomly selected",
+                  themes: randomThemes,
+                });
+              }
+            }
+          );
         }
-
-        res.send({ message: "Themes randomly selected", themes: randomThemes });
       }
-    }
-  );
+    );
+  }
 };
 
 exports.getRandomQuestionByTheme = (req, res) => {
