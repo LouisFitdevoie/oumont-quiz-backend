@@ -389,3 +389,34 @@ exports.getQuestionById = (req, res) => {
     }
   );
 };
+
+exports.getAllQuestions = (req, res) => {
+  pool.query("SELECT * FROM Questions", (error, results) => {
+    if (error) {
+      res.status(500).send({ error: "Error while getting the questions" });
+      return;
+    } else if (results.length == 0) {
+      res.status(400).send({ error: "No questions found" });
+      return;
+    } else {
+      let questions = [];
+      results.forEach((result) => {
+        questions.push({
+          id: result.id,
+          questionType: result.question_type,
+          question: result.question,
+          answer: result.answer,
+          points: result.points,
+          choices: result.choices,
+          explanation: result.explanation,
+          theme: result.theme,
+          imageName: result.image_name,
+        });
+      });
+      res.send({
+        message: "Questions retrieved",
+        questions: questions,
+      });
+    }
+  });
+};
