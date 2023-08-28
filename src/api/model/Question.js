@@ -7,11 +7,11 @@ class Question {
     this.id = uuid.v4();
     this.questionType = line[0];
     this.theme = line[1];
-    this.question = line[2];
-    this.answer = line[3];
+    this.question = decodeUnicode(line[2]);
+    this.answer = decodeUnicode(line[3]);
     this.points = parseInt(line[4]);
-    this.choices = line[5]; // For the DB, it will be a string like "1/2/3/4"
-    this.explanation = line[6];
+    this.choices = decodeUnicode(line[5]); // For the DB, it will be a string like "1/2/3/4"
+    this.explanation = decodeUnicode(line[6]);
     this.imageName = line[7];
     this.isBonus = new Boolean(parseInt(line[8]));
     this.gameId = gameId;
@@ -19,24 +19,10 @@ class Question {
   }
 }
 
+const decodeUnicode = (text) => {
+  return text.replace(/\\u([\dA-F]{4})/gi, (match, grp) =>
+    String.fromCharCode(parseInt(grp, 16))
+  );
+};
+
 module.exports = Question;
-
-/* Function to read data from a csv file formatted like specified in the README.md
-
-const fs = require("fs");
-const Question = require("./model/Question");
-
-var questions = [];
-
-fs.readFile("./src/test.csv", "utf8", (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  const fileContent = data.split("\n").slice(1);
-  fileContent.forEach((line) => {
-    questions.push(new Question(line, game.id));
-  });
-});
-
-*/
