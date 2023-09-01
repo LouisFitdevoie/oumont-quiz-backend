@@ -177,11 +177,30 @@ exports.getRandomThemes = (req, res) => {
                 });
               } else {
                 let randomThemes = [];
+                //For now, not favoring themes with the most questions
+                const regex = new RegExp(
+                  "^(19[0-9]{2}|20[0-9]{2})-(19[0-9]{2}|20[0-9]{2})$"
+                );
+
+                const notDecadeThemesWeight =
+                  process.env.NOT_DECADE_THEMES_WEIGHT; //Can be tweaked to favor themes that are not decades
+                let themesReceived = [];
+                results.forEach((result) => {
+                  if (!regex.test(result.theme)) {
+                    for (let i = 0; i < notDecadeThemesWeight; i++) {
+                      themesReceived.push(result);
+                    }
+                  } else {
+                    themesReceived.push(result);
+                  }
+                });
 
                 for (let i = 0; i < numberOfRandomThemes; i++) {
-                  let randomIndex = Math.floor(Math.random() * results.length);
-                  randomThemes.push(results[randomIndex].theme);
-                  results.splice(randomIndex, 1);
+                  let randomIndex = Math.floor(
+                    Math.random() * themesReceived.length
+                  );
+                  randomThemes.push(themesReceived[randomIndex].theme);
+                  themesReceived.splice(randomIndex, 1);
                 }
 
                 res.send({
