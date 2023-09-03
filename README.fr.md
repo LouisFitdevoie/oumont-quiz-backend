@@ -114,6 +114,4 @@ A la fin des trois questions, on devra choisir de soit passer à un nouveau thè
 ### Calcul des points
 
 Quand l'utilisateur voudra saisir les réponses données par les groupes, il devra saisir les réponses données par chaque groupe pour chaque question.
-Pour les questions à choix multiples et les questions ouvertes, il devra simplement spécifier si le groupe a répondu correctement ou non.
-Pour les questions d'estimation, il devra saisir la réponse donnée par le groupe et l'ordinateur calculera le nombre de points que le groupe a obtenu en fonction de la réponse donnée et de la réponse correcte.
 Une fois que toutes les réponses ont été saisies, l'ordinateur calcule le score de chaque groupe et affiche le classement des groupes sous la forme d'un diagramme en bâtonnets horizontal.
