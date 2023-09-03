@@ -7,6 +7,59 @@
 
 Oumont Quiz est une application web permettant de créer des quiz qui seront joués par groupe dans une salle au cours d'évènements.
 
+## Installation de l'application
+
+### Prérequis
+
+Pour pouvoir installer et utiliser l'application, vous devez avoir installé sur votre ordinateur :
+
+- Docker
+- NPM
+- Node.js
+
+### Installation
+
+Pour installer l'application, vous devez suivre les étapes suivantes :
+
+1. Télécharger le code source de l'application frontend sur votre ordinateur
+2. Télécharger le code source de l'application backend sur votre ordinateur
+3. Ouvrir un terminal et se placer dans le dossier contenant le code source de l'application frontend
+4. Exécuter la commande `npm install` pour installer les dépendances de l'application frontend
+5. Ouvrir un terminal et se placer dans le dossier contenant le code source de l'application backend
+6. Exécuter la commande `npm install` pour installer les dépendances de l'application backend
+7. Ouvrir un terminal et se placer dans le dossier contenant le code source de l'application backend
+8. Exécuter la commande `docker-compose up` pour créer le container contenant la base de données sur docker
+9. Ouvrir le fichier [generates_tables.sql](./generate_tables.sql) et insérer les mots de passe des utilisateurs qui seront créés dans la base de données (lignes 127, 130, 133)
+10. Ouvrir le container dans docker, se connecter à la base de données et copier-coller le code SQL contenu dans le fichier `generate_tables.sql` dans le container pour créer la base de données, les tables et les utilisateurs nécessaires au fonctionnement de l'application
+11. Créer un fichier `.env` dans le dossier contenant le code source de l'application backend et y insérer les variables d'environnement suivantes :
+
+```env
+DB_PASSWORD_PROD=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_PASSWORD_TEST=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_PASSWORD_DEV=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_USER_PROD=oumont_quiz // Ne pas modifier
+DB_USER_TEST=oumont_quiz_test // Ne pas modifier
+DB_USER_DEV=oumont_quiz_dev // Ne pas modifier
+DATABASE_PORT=3306 // Port sur lequel la base de données sera accessible (Ne pas modifier)
+NODE_ENV=development // Ne pas modifier
+DATABASE_PROD=oumont_quiz // Ne pas modifier
+DATABASE_TESTING=oumont_quiz_test // Ne pas modifier
+DATABASE_DEV=oumont_quiz_dev // Ne pas modifier
+DATABASE_HOST=localhost // Host sur lequel la base de données sera accessible
+API_VERSION=v1  // Version de l'API (Ne pas modifier)
+API_PORT=8000 // Port sur lequel l'application backend sera accessible
+API_HOST=localhost
+TEST_FILES_TOTAL=3 // Ne pas modifier
+TEST_FILES_COMPLETED=0 // Ne pas modifier
+NOT_DECADE_THEMES_WEIGHT=2 // Poids des thèmes qui ne sont pas des décennies
+```
+
+12. Ouvrir un terminal et se placer dans le dossier contenant le code source de l'application backend
+13. Exécuter la commande `npm start` pour démarrer l'application backend
+14. Ouvrir un terminal et se placer dans le dossier contenant le code source de l'application frontend
+15. Exécuter la commande `npm start` pour démarrer l'application frontend
+16. Ouvrir un navigateur et se rendre à l'adresse `http://localhost:3000` pour accéder à l'application
+
 ## Déroulement d'une partie
 
 ### Préparation des questions
