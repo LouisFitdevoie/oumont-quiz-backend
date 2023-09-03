@@ -123,3 +123,14 @@ CREATE TABLE `Questions` (
 
 ALTER TABLE `Groups` ADD CONSTRAINT `fk_game_id_groups_dev` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
 ALTER TABLE `Questions` ADD CONSTRAINT `fk_game_id_questions_dev` FOREIGN KEY (`game_id`) REFERENCES `Games`(`id`);
+
+CREATE USER 'oumont_quiz'@'%' IDENTIFIED BY 'INSERT_A_PASSWORD';
+GRANT INSERT, UPDATE, DELETE, SELECT ON `oumont_quiz`.* TO 'oumont_quiz'@'%';
+
+CREATE USER 'oumont_quiz_test'@'%' IDENTIFIED BY 'INSERT_A_PASSWORD';
+GRANT INSERT, UPDATE, DELETE, SELECT ON `oumont_quiz_test`.* TO 'oumont_quiz_test'@'%';
+
+CREATE USER 'oumont_quiz_dev'@'%' IDENTIFIED BY 'INSERT_A_PASSWORD';
+GRANT INSERT, UPDATE, DELETE, SELECT ON `oumont_quiz_dev`.* TO 'oumont_quiz_dev'@'%';
+
+FLUSH PRIVILEGES;

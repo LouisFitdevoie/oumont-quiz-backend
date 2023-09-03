@@ -7,6 +7,58 @@
 
 Oumont Quiz is a web application for creating quizes to be played by groups in a room during events.
 
+## Installation of the application
+
+### Prerequisites
+
+To be able to install and use the application, you must have installed on your computer:
+
+- Docker
+- NPM
+- Node.js
+
+### Installation
+
+To install the application, you must follow the following steps:
+
+1. Download the source code of the frontend application to your computer
+2. Download the source code of the backend application to your computer
+3. Open a terminal and go to the folder containing the source code of the frontend application
+4. Run the command `npm install` to install the dependencies of the frontend application
+5. Open a terminal and go to the folder containing the source code of the backend application
+6. Run the command `npm install` to install the dependencies of the backend application
+7. Run the command `docker-compose up` to create the container containing the database on docker
+8. Open the file [generates_tables.sql](./generate_tables.sql) and insert the passwords of the users that will be created in the database (lines 127, 130, 133)
+9. Open the container in docker, connect to the database and copy-paste the SQL code contained in the file `generate_tables.sql` in the container to create the database, tables and users necessary for the application to work
+10. Create a `.env` file in the folder containing the source code of the backend application and insert the following environment variables:
+
+```env
+DB_PASSWORD_PROD=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_PASSWORD_TEST=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_PASSWORD_DEV=SAME_PASSWORD_AS_IN_GENERATE_TABLES.SQL
+DB_USER_PROD=oumont_quiz // Do not modify
+DB_USER_TEST=oumont_quiz_test // Do not modify
+DB_USER_DEV=oumont_quiz_dev // Do not modify
+DATABASE_PORT=3306 // Port on which the database will be accessible (Do not modify)
+NODE_ENV=development // Do not modify
+DATABASE_PROD=oumont_quiz // Do not modify
+DATABASE_TESTING=oumont_quiz_test // Do not modify
+DATABASE_DEV=oumont_quiz_dev // Do not modify
+DATABASE_HOST=localhost // Host on which the database will be accessible
+API_VERSION=v1  // API version (Do not modify)
+API_PORT=8000 // Port on which the backend application will be accessible
+API_HOST=localhost
+TEST_FILES_TOTAL=3 // Do not modify
+TEST_FILES_COMPLETED=0 // Do not modify
+NOT_DECADE_THEMES_WEIGHT=2 // Weight of themes that are not decades
+```
+
+12. Open a terminal and go to the folder containing the source code of the backend application
+13. Run the command `npm start` to start the backend application
+14. Open a terminal and go to the folder containing the source code of the frontend application
+15. Run the command `npm start` to start the frontend application
+16. Open a browser and go to the address `http://localhost:3000` to access the application
+
 ## Game flow
 
 ### Questions preparation
@@ -48,16 +100,11 @@ When the host creates a new game, he or she must follow several steps:
 
 1. Choose a name for the game
 2. Import the question file (see _Questions preparation_) and check that the questions have been imported. If not, check that the file is in `csv` format, contains the required columns and follows the formatting described above.
-3. Enter the number of questions to be asked during the qualifying round.
-4. If the host wants bonus questions to be asked during the game, he/she should click on the `Yes` button and enter the number of bonus questions he/she wants to ask. The computer will then calculate how often bonus questions will be asked during the game. If you do not wish to ask bonus questions, click on the `No` button.
-5. Enter the number of questions to be asked during the semi-finals.
-6. Enter the number of questions to be asked during the small final, which will determine the 3rd place.
-7. Enter the number of questions to be asked during the final, which will determine the 1st and 2nd place.
-8. Enter the maximum response time for each type of question (in seconds).
-9. Enter the number of people required to make up a group (4 by default).
-10. Enter the names of the groups who will take part in the game.
+3. Enter the maximum response time for each type of question (in seconds).
+4. Enter the number of people required to make up a group (4 by default).
+5. Enter the names of the groups who will take part in the game.
 
-Once all these steps have been completed, the host can click on the `Start Game` button to launch the game and start the qualifying round.
+Once all these steps have been completed, the host can click on the `Start Game` button to launch the game and start the qualifying round. Once the game has started, the host won't be able to modify the game settings. He will only be able to pause the game or end it.
 
 ### Game
 
@@ -70,17 +117,3 @@ When the user wants to enter the answers given by the groups, he will have to en
 For the multiple choice questions and the open questions, the host only has to specify if the answer is correct or not.
 For the estimate questions, the host has to enter the answer given by the group and the computer will calculate the points earned by the group depending on the answer given and the correct answer.
 Once all the answers have been entered, the computer will calculate the points of every group and display the ranking of the qualifying round in the form of a horizontal bar chart.
-
-## Advantages
-
-The advantages will be developed in the future. For now, they are not available.
-The advantages are bonuses that the groups can earn by correctly answering a bonus question.
-The available advantages are the following:
-
-| Advantage | Description                                                                                                                                               |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `joker1`  | The group can earn twice the amount of points for the next question by answering correctly. If they answer incorrectly, they won't lose or win any point. |
-| `joker2`  | The group can remove 1 point to another group.                                                                                                            |
-| `joker3`  | The group can answer twice to a question. Only one correct answer will be accepted.                                                                       |
-
-Other advantages may be added in the future.
