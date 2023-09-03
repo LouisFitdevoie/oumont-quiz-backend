@@ -114,6 +114,4 @@ At the end of the three questions, the choice is between moving on to a new them
 ### Points calculation
 
 When the user wants to enter the answers given by the groups, he will have to enter the answers given by each group for each question.
-For the multiple choice questions and the open questions, the host only has to specify if the answer is correct or not.
-For the estimate questions, the host has to enter the answer given by the group and the computer will calculate the points earned by the group depending on the answer given and the correct answer.
 Once all the answers have been entered, the computer will calculate the points of every group and display the ranking of the qualifying round in the form of a horizontal bar chart.
