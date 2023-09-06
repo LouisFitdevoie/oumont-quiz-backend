@@ -439,3 +439,31 @@ exports.getAllQuestions = (req, res) => {
     }
   });
 };
+
+exports.deleteQuestionsForGameId = (req, res) => {
+  const gameId = req.params.gameId;
+  console.log("DELETE QUESTIONS FOR GAME ID: " + gameId);
+
+  if (gameId == "") {
+    res.status(400).send({ error: "Game id cannot be empty" });
+    return;
+  } else if (!uuid.validate(gameId)) {
+    res.status(400).send({ error: "Game id is not valid" });
+    return;
+  }
+
+  pool.query(
+    "DELETE FROM Questions WHERE game_id = ?",
+    [gameId],
+    (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error while deleting the questions" });
+        return;
+      } else {
+        res.send({
+          message: "Questions deleted",
+        });
+      }
+    }
+  );
+};
