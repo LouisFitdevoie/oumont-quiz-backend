@@ -157,3 +157,35 @@ exports.getAllGames = (req, res) => {
     }
   });
 };
+
+exports.deleteGameById = (req, res) => {
+  const gameId = req.params.gameId;
+  console.log("DELETING GAME FOR ID: " + gameId);
+
+  if (gameId == "") {
+    res.status(400).send({ error: "Game id cannot be empty" });
+    return;
+  } else if (!uuid.validate(gameId)) {
+    res.status(400).send({ error: "Game id is not valid" });
+    return;
+  }
+
+  pool.query("DELETE FROM Games WHERE id = ?", [gameId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send({
+        error: "Error while deleting the game",
+      });
+      return;
+    } else if (results.affectedRows == 0) {
+      res.status(404).send({
+        error: "Game not found",
+      });
+      return;
+    } else {
+      res.status(200).send({
+        message: "Game successfully deleted",
+      });
+    }
+  });
+};

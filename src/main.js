@@ -75,6 +75,10 @@ exports.startServer = () => {
     gameController.getAllGames(req, res);
   });
 
+  app.delete(baseURL + "/game/:gameId", (req, res) => {
+    gameController.deleteGameById(req, res);
+  });
+
   //***** GROUPS *****//
 
   app.post(baseURL + "/group", (req, res) => {
@@ -129,5 +133,9 @@ exports.startServer = () => {
 
   app.get(baseURL + "/questions", (req, res) => {
     questionController.getAllQuestions(req, res);
+  });
+
+  app.delete(baseURL + "/questions/:gameId", (req, res) => {
+    questionController.deleteQuestionsForGameId(req, res);
   });
 };
