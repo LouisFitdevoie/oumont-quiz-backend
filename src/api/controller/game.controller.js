@@ -4,10 +4,12 @@ const database = require("../../database.js");
 const Game = require("../model/Game.js");
 const pool = database.pool;
 
+//Function to create a game
 exports.createGame = (req, res) => {
   const dataReceived = req.body;
   const gameToCreate = new Game("", [0, 0, 0]);
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("name") == false) {
     res.status(400).send({
       error: "Missing name",
@@ -65,6 +67,7 @@ exports.createGame = (req, res) => {
     }
   }
 
+  //Create the game in the DB
   pool.query(
     "INSERT INTO Games (id, name, time_to_answer, persons_per_group, created_at) VALUES (?, ?, ?, ?, ?)",
     [
@@ -91,9 +94,11 @@ exports.createGame = (req, res) => {
   );
 };
 
+//Function to get a game by its id
 exports.getGameById = (req, res) => {
   const gameId = req.params.id;
 
+  //Verify if the request is valid
   if (!uuid.validate(gameId)) {
     res.status(400).send({
       error: "Invalid game id",
@@ -101,6 +106,7 @@ exports.getGameById = (req, res) => {
     return;
   }
 
+  //Get the game from the DB
   pool.query("SELECT * FROM Games WHERE id = ?", [gameId], (error, results) => {
     if (error) {
       console.error(error);
@@ -128,6 +134,7 @@ exports.getGameById = (req, res) => {
   });
 };
 
+//Function to get all the games
 exports.getAllGames = (req, res) => {
   pool.query("SELECT id, name, created_at FROM Games", (error, results) => {
     if (error) {
@@ -158,6 +165,7 @@ exports.getAllGames = (req, res) => {
   });
 };
 
+//Function to delete a game by its id
 exports.deleteGameById = (req, res) => {
   const gameId = req.params.gameId;
   console.log("DELETING GAME FOR ID: " + gameId);

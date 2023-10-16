@@ -3,15 +3,19 @@ const mysql = require("mysql2");
 const express = require("express");
 const cors = require("cors");
 
+//Importing the controllers
 const gameController = require("./api/controller/game.controller.js");
 const groupController = require("./api/controller/group.controller.js");
 const questionController = require("./api/controller/question.controller.js");
 
+//Starting the server
 exports.startServer = () => {
   const app = express();
 
+  //Getting the port of the DB from the environment variables or setting it to 3306
   const databasePort = process.env.DATABASE_PORT || 3306;
 
+  //Getting the DB credentials from the environment variables
   let db = {
     database: "",
     user: "",
@@ -30,8 +34,11 @@ exports.startServer = () => {
     db.user = process.env.DB_USER_TEST;
     db.password = process.env.DB_PASSWORD_TEST;
   }
+
+  //Setting the base URL for the API
   const baseURL = `/api/${process.env.API_VERSION}`;
 
+  //Creating the connection to the DB
   const db_connection = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: db.user,
@@ -40,28 +47,25 @@ exports.startServer = () => {
     port: databasePort,
   });
 
+  //Connecting to the DB
   db_connection.connect(function (err) {
     if (err) throw err;
     console.log(`Connected to the database on port ${databasePort}!`);
   });
 
+  //Setting the port of the API from the environment variables or setting it to 8000
   const apiPort = process.env.API_PORT || 8000;
 
+  //Starting the backend server
   app.listen(apiPort, () => {
     console.log(`Server started on port ${apiPort}`);
   });
 
+  //Setting the middleware for JSON and CORS (Cross-Origin Resource Sharing)
   app.use(express.json());
   app.use(cors({ origin: "http://localhost:3000" }));
 
   //***** GAMES *****//
-
-  app.get(baseURL + "/", (req, res) => {
-    res.json({
-      message: "Hello API World!",
-      status: 200,
-    });
-  });
 
   app.post(baseURL + "/game", (req, res) => {
     gameController.createGame(req, res);
