@@ -5,9 +5,11 @@ const database = require("../../database.js");
 const Question = require("../model/Question.js");
 const pool = database.pool;
 
+//Function to create a question
 exports.createQuestions = (req, res) => {
   const dataReceived = req.body;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("gameId") == false) {
     res.status(400).send({
       error: "Missing game id",
@@ -46,12 +48,14 @@ exports.createQuestions = (req, res) => {
   let fileLines = dataReceived.fileLines;
   let questionArray = [];
 
+  //Creating an array of questions from the file lines
   fileLines.forEach((line) => {
     questionArray.push(new Question(line, gameId));
   });
 
   let questionAlreadyExisting = 0;
   let promises = [];
+  //Creating promises to insert each question in the database AND verifying if the question already exists
   questionArray.forEach((question) => {
     const promise = new Promise((resolve, reject) => {
       pool.query(
@@ -66,6 +70,7 @@ exports.createQuestions = (req, res) => {
             questionAlreadyExisting++;
             resolve();
           } else {
+            // Insert the question
             pool.query(
               "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               [
@@ -99,6 +104,7 @@ exports.createQuestions = (req, res) => {
     promises.push(promise);
   });
 
+  //Executing all the promises
   Promise.all(promises)
     .then(() => {
       if (questionAlreadyExisting == 0) {
@@ -126,10 +132,12 @@ exports.createQuestions = (req, res) => {
     });
 };
 
+//Function to get random themes for a game
 exports.getRandomThemes = (req, res) => {
   const dataReceived = req.query;
-  const numberOfRandomThemes = 2;
+  const numberOfRandomThemes = 2; //Change this value to get more or less random themes BUT need to change the front-end too
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("gameId") == false) {
     res.status(400).send({ error: "Game id must be provided" });
     return;
@@ -140,6 +148,7 @@ exports.getRandomThemes = (req, res) => {
     res.status(400).send({ error: "Game id is not valid" });
     return;
   } else {
+    //Verify if the game exists
     pool.query(
       "SELECT * FROM Games WHERE id = ?",
       [dataReceived.gameId],
@@ -151,6 +160,7 @@ exports.getRandomThemes = (req, res) => {
           res.status(400).send({ error: "No game found with this id" });
           return;
         } else {
+          //Getting all the themes that have at least 3 questions not asked for this game
           pool.query(
             "SELECT theme FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
             [dataReceived.gameId],
@@ -167,6 +177,7 @@ exports.getRandomThemes = (req, res) => {
                 });
                 return;
               } else if (results.length < numberOfRandomThemes) {
+                //If there are less themes than the number of random themes we want, we return all the themes left
                 let themes = [];
                 results.forEach((result) => {
                   themes.push(result.theme);
@@ -178,6 +189,7 @@ exports.getRandomThemes = (req, res) => {
               } else {
                 let randomThemes = [];
 
+                //Getting random themes
                 for (let i = 0; i < numberOfRandomThemes; i++) {
                   let randomIndex = Math.floor(Math.random() * results.length);
                   randomThemes.push(results[randomIndex].theme);
@@ -197,9 +209,11 @@ exports.getRandomThemes = (req, res) => {
   }
 };
 
+//Function to get a random question for a theme
 exports.getRandomQuestionByTheme = (req, res) => {
   const dataReceived = req.query;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("gameId") == false) {
     res.status(400).send({ error: "Game id must be provided" });
     return;
@@ -220,7 +234,7 @@ exports.getRandomQuestionByTheme = (req, res) => {
   }
 
   //TODO - Depending on the bonus, we need to know if we return the bonus question or not (TBD)
-
+  //Selecting a random question for the theme and the game that is not yet asked
   pool.query(
     "SELECT * FROM Questions WHERE game_id = ? AND theme = ? AND is_asked = false",
     [dataReceived.gameId, dataReceived.theme],
@@ -235,6 +249,7 @@ exports.getRandomQuestionByTheme = (req, res) => {
         let randomIndex = Math.floor(Math.random() * results.length);
         let question = results[randomIndex];
 
+        //Updating the question to set it as asked so it is not asked again
         pool.query(
           "UPDATE Questions SET is_asked = true WHERE id = ?",
           [question.id],
@@ -266,9 +281,11 @@ exports.getRandomQuestionByTheme = (req, res) => {
   );
 };
 
+//Function to get the answer for a question with its id
 exports.getAnswer = (req, res) => {
   const dataReceived = req.body;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("questionId") == false) {
     res.status(400).send({ error: "Question id must be provided" });
     return;
@@ -280,6 +297,7 @@ exports.getAnswer = (req, res) => {
     return;
   }
 
+  //Getting the answer for the question with its id and that is already asked
   pool.query(
     "SELECT * FROM Questions WHERE id = ? AND is_asked = true",
     [dataReceived.questionId],
@@ -304,9 +322,11 @@ exports.getAnswer = (req, res) => {
   );
 };
 
+//Function to get the image for a question
 exports.getQuestionImage = (req, res) => {
   const dataReceived = req.query;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("imageName") == false) {
     res.status(400).send({ error: "Image name must be provided" });
     return;
@@ -324,6 +344,7 @@ exports.getQuestionImage = (req, res) => {
   const imageName = dataReceived.imageName;
   const extensionsAllowes = ["jpg", "png", "gif", "jpeg"];
 
+  //Verify if the extension is allowed from the list above
   if (
     !extensionsAllowes.includes(
       imageName.split(".")[imageName.split(".").length - 1]
@@ -333,6 +354,7 @@ exports.getQuestionImage = (req, res) => {
     return;
   }
 
+  //Sending the image
   res.sendFile(
     imageName,
     {
@@ -346,9 +368,11 @@ exports.getQuestionImage = (req, res) => {
   );
 };
 
+//Function to get a question by its id
 exports.getQuestionById = (req, res) => {
   const dataReceived = req.params;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("questionId") == false) {
     res.status(400).send({ error: "Question id must be provided" });
     return;
@@ -360,6 +384,7 @@ exports.getQuestionById = (req, res) => {
     return;
   }
 
+  //Getting the question with its id
   pool.query(
     "SELECT * FROM Questions WHERE id = ?",
     [dataReceived.questionId],
@@ -390,6 +415,7 @@ exports.getQuestionById = (req, res) => {
   );
 };
 
+//Function to get all the questions
 exports.getAllQuestions = (req, res) => {
   pool.query("SELECT * FROM Questions", (error, results) => {
     if (error) {
@@ -421,6 +447,7 @@ exports.getAllQuestions = (req, res) => {
   });
 };
 
+//Function to delete all the questions for a game
 exports.deleteQuestionsForGameId = (req, res) => {
   const gameId = req.params.gameId;
   console.log("DELETE QUESTIONS FOR GAME ID: " + gameId);
