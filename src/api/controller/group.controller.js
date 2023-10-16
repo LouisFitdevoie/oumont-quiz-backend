@@ -4,10 +4,12 @@ const database = require("../../database.js");
 const Group = require("../model/Group.js");
 const pool = database.pool;
 
+//Function to create a group
 exports.createGroup = (req, res) => {
   const dataReceived = req.body;
   const groupToCreate = new Group("", "", 0, []);
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("name") == false) {
     res.status(400).send({
       error: "Missing group name",
@@ -37,6 +39,7 @@ exports.createGroup = (req, res) => {
     });
     return;
   } else {
+    //Verify if the game id exists
     pool.query(
       "SELECT id FROM Games WHERE id = ?",
       [dataReceived.gameId],
@@ -49,6 +52,7 @@ exports.createGroup = (req, res) => {
           return;
         } else {
           groupToCreate.gameId = dataReceived.gameId;
+          //Create the group
           pool.query(
             "INSERT INTO `Groups` (id, name, game_id, points, bonus, is_qualified, ranking) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
@@ -80,6 +84,7 @@ exports.createGroup = (req, res) => {
   }
 };
 
+//Function to get all groups for a game
 exports.getAllGroupsForGame = (req, res) => {
   if (req.query.hasOwnProperty("gameId") == false) {
     res.status(400).send({
@@ -100,6 +105,7 @@ exports.getAllGroupsForGame = (req, res) => {
     });
     return;
   } else {
+    //Getting all groups for a game
     pool.query(
       "SELECT * FROM `Groups` WHERE game_id = ?",
       [gameId],
@@ -134,8 +140,10 @@ exports.getAllGroupsForGame = (req, res) => {
   }
 };
 
+//Function to update the points for a group
 exports.updatePointsForGroup = (req, res) => {
   const dataReceived = req.body;
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
@@ -167,6 +175,7 @@ exports.updatePointsForGroup = (req, res) => {
       return;
     } else {
       let pointsUpdated = points;
+      //Getting the points for the group
       pool.query(
         "SELECT points FROM `Groups` WHERE id = ?",
         [dataReceived.groupId],
@@ -178,6 +187,7 @@ exports.updatePointsForGroup = (req, res) => {
             });
             return;
           } else {
+            //Calculating the new points and updating it in the DB
             pointsUpdated += parseInt(result[0].points);
             pool.query(
               "UPDATE `Groups` SET points = ? WHERE id = ?",
@@ -196,9 +206,11 @@ exports.updatePointsForGroup = (req, res) => {
   }
 };
 
+//Function to update the isQualified status for a group --> this function is not used in the app for now
 exports.updateQualifiedStatusForGroup = (req, res) => {
   const dataReceived = req.body;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
@@ -315,9 +327,11 @@ exports.updateQualifiedStatusForGroup = (req, res) => {
   }
 };
 
+//Function to update the name of a group
 exports.updateGroupName = (req, res) => {
   const dataReceived = req.body;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
@@ -347,6 +361,7 @@ exports.updateGroupName = (req, res) => {
     return;
   }
 
+  //Verify if the group exists
   pool.query(
     "SELECT id FROM `Groups` WHERE id = ?",
     [dataReceived.groupId],
@@ -358,6 +373,7 @@ exports.updateGroupName = (req, res) => {
         });
         return;
       }
+      //Update the group name
       pool.query(
         "UPDATE `Groups` SET name = ? WHERE id = ?",
         [dataReceived.name, dataReceived.groupId],
@@ -377,9 +393,11 @@ exports.updateGroupName = (req, res) => {
   );
 };
 
+//Function to delete a group
 exports.deleteGroup = (req, res) => {
   const dataReceived = req.body;
 
+  //Verify if the request is valid
   if (dataReceived.hasOwnProperty("groupId") == false) {
     res.status(400).send({
       error: "Missing group id",
@@ -397,6 +415,7 @@ exports.deleteGroup = (req, res) => {
     return;
   }
 
+  //Verify if the group exists
   pool.query(
     "SELECT id FROM `Groups` WHERE id = ?",
     [dataReceived.groupId],
@@ -408,6 +427,7 @@ exports.deleteGroup = (req, res) => {
         });
         return;
       }
+      //Delete the group
       pool.query(
         "DELETE FROM `Groups` WHERE id = ?",
         [dataReceived.groupId],
