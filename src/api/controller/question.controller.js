@@ -132,6 +132,223 @@ exports.createQuestions = (req, res) => {
     });
 };
 
+//Function to create a question from a json object
+exports.createQuestionFromJSON = (req, res) => {
+  if (req.body.hasOwnProperty("question") == false) {
+    res.status(400).send({
+      error: "Question object is missing",
+    });
+    return;
+  }
+  const question = req.body.question;
+
+  if (question.hasOwnProperty("questionType") == false) {
+    res.status(400).send({
+      error: "Question type is missing",
+    });
+    return;
+  } else if (
+    question.questionType != "multipleChoice" &&
+    question.questionType != "open" &&
+    question.questionType != "estimate"
+  ) {
+    res.status(400).send({
+      error: "Question type is not valid",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("theme") == false) {
+    res.status(400).send({
+      error: "Theme is missing",
+    });
+    return;
+  } else if (question.theme.trim() == "") {
+    res.status(400).send({
+      error: "Theme cannot be empty",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("question") == false) {
+    res.status(400).send({
+      error: "Question is missing",
+    });
+    return;
+  } else if (question.question.trim() == "") {
+    res.status(400).send({
+      error: "Question cannot be empty",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("answer") == false) {
+    res.status(400).send({
+      error: "Answer is missing",
+    });
+    return;
+  } else if (question.answer.trim() == "") {
+    res.status(400).send({
+      error: "Answer cannot be empty",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("points") == false) {
+    res.status(400).send({
+      error: "Points is missing",
+    });
+    return;
+  } else if (question.points.trim() == "") {
+    res.status(400).send({
+      error: "Points cannot be empty",
+    });
+    return;
+  } else if (parseInt(question.points) == NaN) {
+    res.status(400).send({
+      error: "Points is not valid",
+    });
+    return;
+  } else if (parseInt(question.points) < 0) {
+    res.status(400).send({
+      error: "Points cannot be negative",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("choices") == false) {
+    res.status(400).send({
+      error: "Choices is missing",
+    });
+    return;
+  } else if (
+    question.questionType == "multipleChoice" &&
+    question.choices == ""
+  ) {
+    res.status(400).send({
+      error: "Choices cannot be empty if the question type is multiple choice",
+    });
+    return;
+  } else if (
+    question.questionType == "multipleChoice" &&
+    question.choices.split("/").length < 2
+  ) {
+    res.status(400).send({
+      error:
+        "Must be at least 2 choices if the question type is multiple choice",
+    });
+    return;
+  }
+
+  if (question.hasOwnProperty("gameId") == false) {
+    res.status(400).send({
+      error: "Game id is missing",
+    });
+    return;
+  } else if (question.gameId == "") {
+    res.status(400).send({
+      error: "Game id cannot be empty",
+    });
+    return;
+  } else if (!uuid.validate(question.gameId)) {
+    res.status(400).send({
+      error: "Game id is not valid",
+    });
+    return;
+  }
+
+  const questionToCreate = {
+    id: uuid.v4(),
+    questionType: question.questionType,
+    theme: question.theme,
+    question: decodeUnicode(question.question),
+    answer: decodeUnicode(question.answer),
+    points: parseInt(question.points),
+    choices: decodeUnicode(question.choices),
+    explanation: decodeUnicode(question.explanation),
+    imageName: question.imageName,
+    isBonus: Boolean(question.isBonus),
+    gameId: question.gameId,
+    isAsked: false,
+  };
+
+  //Verify if the game exists
+  pool.query(
+    "SELECT * FROM Games WHERE id = ?",
+    [questionToCreate.gameId],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send({
+          error: "Error while getting the game",
+        });
+        return;
+      } else if (results.length == 0) {
+        res.status(400).send({
+          error: "No game found with this id",
+        });
+        return;
+      } else {
+        //Verify if the question already exists
+
+        pool.query(
+          "SELECT * FROM Questions WHERE game_id = ? AND question = ?",
+          [questionToCreate.gameId, questionToCreate.question],
+          (error, results) => {
+            if (error) {
+              console.log(error);
+              res.status(500).send({
+                error: "Error while getting the question",
+              });
+              return;
+            }
+
+            if (results.length > 0) {
+              res.status(400).send({
+                error: "Question already exists for this game",
+              });
+              return;
+            } else {
+              //Insert the question
+              pool.query(
+                "INSERT INTO Questions (id, question_type, theme, question, answer, points, choices, explanation, image_name, is_bonus, game_id, is_asked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [
+                  questionToCreate.id,
+                  questionToCreate.questionType,
+                  questionToCreate.theme,
+                  questionToCreate.question,
+                  questionToCreate.answer,
+                  questionToCreate.points,
+                  questionToCreate.choices,
+                  questionToCreate.explanation,
+                  questionToCreate.imageName,
+                  questionToCreate.isBonus,
+                  questionToCreate.gameId,
+                  questionToCreate.isAsked,
+                ],
+                (error, results) => {
+                  if (error) {
+                    console.log(error);
+                    res.status(500).send({
+                      error: "Error while creating the question",
+                    });
+                    return;
+                  } else {
+                    res.status(201).send({
+                      message: "Question created",
+                    });
+                    return;
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
+};
+
 //Function to get random themes for a game
 exports.getRandomThemes = (req, res) => {
   const dataReceived = req.query;
@@ -473,5 +690,11 @@ exports.deleteQuestionsForGameId = (req, res) => {
         });
       }
     }
+  );
+};
+
+const decodeUnicode = (text) => {
+  return text.replace(/\\u([\dA-F]{4})/gi, (match, grp) =>
+    String.fromCharCode(parseInt(grp, 16))
   );
 };
