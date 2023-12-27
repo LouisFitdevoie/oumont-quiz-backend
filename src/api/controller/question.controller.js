@@ -204,7 +204,7 @@ exports.createQuestionFromJSON = (req, res) => {
       error: "Points cannot be empty",
     });
     return;
-  } else if (parseInt(question.points) == NaN) {
+  } else if (isNaN(parseInt(question.points))) {
     res.status(400).send({
       error: "Points is not valid",
     });
@@ -290,7 +290,6 @@ exports.createQuestionFromJSON = (req, res) => {
         return;
       } else {
         //Verify if the question already exists
-
         pool.query(
           "SELECT * FROM Questions WHERE game_id = ? AND question = ?",
           [questionToCreate.gameId, questionToCreate.question],

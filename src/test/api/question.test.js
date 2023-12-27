@@ -512,6 +512,383 @@ describe("GET /questionImage", () => {
   });
 });
 
+describe("POST /questionJSON", () => {
+  it("should return an error if the question object is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question object is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the question type is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {},
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question type is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the question type is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question type is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the theme is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Theme is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the theme is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Theme cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the question is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the question is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Question cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the answer is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Answer is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the answer is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Answer cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the points are missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Points is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the points are empty", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Points cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the points are not a number", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Points is not valid");
+        done();
+      });
+  });
+
+  it("should return an error if the points are negative", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "-1",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Points cannot be negative");
+        done();
+      });
+  });
+
+  it("should return an error if the choices are missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Choices is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the choices are empty and the question type is multiple choice", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+          choices: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql(
+          "Choices cannot be empty if the question type is multiple choice"
+        );
+        done();
+      });
+  });
+
+  it("should return an error if there is less than 2 choices and the question type is multiple choice", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+          choices: "test",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql(
+          "Must be at least 2 choices if the question type is multiple choice"
+        );
+        done();
+      });
+  });
+
+  it("should return an error if the game id is missing", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+          choices: "test1/test2/test3/test4",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Game id is missing");
+        done();
+      });
+  });
+
+  it("should return an error if the game id is empty", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+          choices: "test1/test2/test3/test4",
+          gameId: "",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Game id cannot be empty");
+        done();
+      });
+  });
+
+  it("should return an error if the game id is not valid", (done) => {
+    chai
+      .request(serverAddress)
+      .post(baseURL + "/questionJSON")
+      .send({
+        question: {
+          questionType: "multipleChoice",
+          theme: "test",
+          question: "test",
+          answer: "test",
+          points: "1",
+          choices: "test1/test2/test3/test4",
+          gameId: "123",
+        },
+      })
+      .end((err, res) => {
+        res.should.be.a("object");
+        res.body.should.have.property("error");
+        res.body.error.should.eql("Game id is not valid");
+        done();
+      });
+  });
+});
+
 after((done) => {
   const database = require("../../database.js");
   const pool = database.pool;
