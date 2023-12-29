@@ -110,6 +110,8 @@ exports.createQuestions = (req, res) => {
       if (questionAlreadyExisting == 0) {
         res.status(201).send({
           message: `${questionArray.length} question(s) created`,
+          questionsCreated: questionArray.length,
+          questionsAlreadyExisting: questionAlreadyExisting,
         });
         return;
       } else if (questionAlreadyExisting == questionArray.length) {
@@ -122,6 +124,8 @@ exports.createQuestions = (req, res) => {
           message: `Only ${
             questionArray.length - questionAlreadyExisting
           } question(s) created as ${questionAlreadyExisting} question(s) already exists for this game`,
+          questionsCreated: questionArray.length,
+          questionsAlreadyExisting: questionAlreadyExisting,
         });
       }
     })
@@ -303,8 +307,8 @@ exports.createQuestionFromJSON = (req, res) => {
             }
 
             if (results.length > 0) {
-              res.status(400).send({
-                error: "Question already exists for this game",
+              res.status(202).send({
+                message: "Question already exists for this game",
               });
               return;
             } else {
