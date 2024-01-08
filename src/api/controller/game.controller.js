@@ -159,7 +159,12 @@ exports.getAllGames = (req, res) => {
       }
       res.status(200).send({
         message: "Games successfully retrieved",
-        games: resultArray,
+        games: resultArray.sort((a, b) => {
+          return new Intl.Collator("fr", {
+            sensitivity: "base",
+            numeric: true,
+          }).compare(a.name, b.name);
+        }),
       });
     }
   });
