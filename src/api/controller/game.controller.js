@@ -144,8 +144,9 @@ exports.getAllGames = (req, res) => {
       });
       return;
     } else if (results.length == 0) {
-      res.status(404).send({
-        error: "No game found",
+      res.status(200).send({
+        message: "No game found",
+        games: [],
       });
       return;
     } else {

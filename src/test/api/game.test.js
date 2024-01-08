@@ -21,8 +21,9 @@ describe("GET /games without game in the DB", () => {
       .request(serverAddress)
       .get(baseURL + "/games")
       .end((err, res) => {
-        res.should.have.status(404);
-        res.body.should.have.property("error").eql("No game found");
+        res.should.have.status(200);
+        res.body.should.have.property("message").eql("No game found");
+        res.body.should.have.property("games").eql([]);
         done();
       });
   });
