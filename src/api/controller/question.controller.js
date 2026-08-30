@@ -94,10 +94,10 @@ exports.createQuestions = (req, res) => {
                 } else {
                   resolve();
                 }
-              }
+              },
             );
           }
-        }
+        },
       );
     });
 
@@ -295,8 +295,12 @@ exports.createQuestionFromJSON = (req, res) => {
       } else {
         //Verify if the question already exists
         pool.query(
-          "SELECT * FROM Questions WHERE game_id = ? AND question = ?",
-          [questionToCreate.gameId, questionToCreate.question],
+          "SELECT * FROM Questions WHERE game_id = ? AND question = ? AND answer = ?",
+          [
+            questionToCreate.gameId,
+            questionToCreate.question,
+            questionToCreate.answer,
+          ],
           (error, results) => {
             if (error) {
               console.log(error);
@@ -342,13 +346,13 @@ exports.createQuestionFromJSON = (req, res) => {
                     });
                     return;
                   }
-                }
+                },
               );
             }
-          }
+          },
         );
       }
-    }
+    },
   );
 };
 
@@ -421,10 +425,10 @@ exports.getRandomThemes = (req, res) => {
                   themes: randomThemes,
                 });
               }
-            }
+            },
           );
         }
-      }
+      },
     );
   }
 };
@@ -494,10 +498,10 @@ exports.getRandomQuestionByTheme = (req, res) => {
                 },
               });
             }
-          }
+          },
         );
       }
-    }
+    },
   );
 };
 
@@ -538,7 +542,7 @@ exports.getAnswer = (req, res) => {
           points: question.points,
         });
       }
-    }
+    },
   );
 };
 
@@ -562,12 +566,12 @@ exports.getQuestionImage = (req, res) => {
   }
 
   const imageName = dataReceived.imageName;
-  const extensionsAllowes = ["jpg", "png", "gif", "jpeg"];
+  const extensionsAllowes = ["jpg", "png", "gif", "jpeg", "JPG"];
 
   //Verify if the extension is allowed from the list above
   if (
     !extensionsAllowes.includes(
-      imageName.split(".")[imageName.split(".").length - 1]
+      imageName.split(".")[imageName.split(".").length - 1],
     )
   ) {
     res.status(400).send({ error: "Image name is not valid" });
@@ -584,7 +588,7 @@ exports.getQuestionImage = (req, res) => {
       if (err) {
         console.log(err);
       }
-    }
+    },
   );
 };
 
@@ -631,7 +635,7 @@ exports.getQuestionById = (req, res) => {
           },
         });
       }
-    }
+    },
   );
 };
 
@@ -692,12 +696,12 @@ exports.deleteQuestionsForGameId = (req, res) => {
           message: "Questions deleted",
         });
       }
-    }
+    },
   );
 };
 
 const decodeUnicode = (text) => {
   return text.replace(/\\u([\dA-F]{4})/gi, (match, grp) =>
-    String.fromCharCode(parseInt(grp, 16))
+    String.fromCharCode(parseInt(grp, 16)),
   );
 };
