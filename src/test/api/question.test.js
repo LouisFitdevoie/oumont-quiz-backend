@@ -68,7 +68,7 @@ describe("POST /questions", () => {
         res.should.be.a("object");
         res.body.should.have.property("error");
         res.body.error.should.be.eql(
-          "Missing file lines to create the questions"
+          "Missing file lines to create the questions",
         );
         done();
       });
@@ -164,7 +164,7 @@ describe("POST /questions", () => {
         res.status.should.be.eql(400);
         res.body.should.have.property("error");
         res.body.error.should.be.eql(
-          "All questions already exist for this game"
+          "All questions already exist for this game",
         );
         done();
       });
@@ -194,7 +194,7 @@ describe("POST /questions", () => {
         res.status.should.be.eql(201);
         res.body.should.have.property("message");
         res.body.message.should.be.eql(
-          "Only 5 question(s) created as 5 question(s) already exists for this game"
+          "Only 5 question(s) created as 5 question(s) already exists for this game",
         );
         done();
       });
@@ -242,7 +242,7 @@ describe("GET /randomThemes", () => {
     chai
       .request(serverAddress)
       .get(
-        baseURL + "/randomThemes?gameId=00000000-0000-0000-0000-000000000000"
+        baseURL + "/randomThemes?gameId=00000000-0000-0000-0000-000000000000",
       )
       .end((err, res) => {
         res.should.be.a("object");
@@ -333,7 +333,7 @@ describe("GET /randomQuestion", () => {
     chai
       .request(serverAddress)
       .get(
-        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace"
+        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace",
       )
       .end((err, res) => {
         res.should.be.a("object");
@@ -357,7 +357,7 @@ describe("GET /randomQuestion", () => {
     chai
       .request(serverAddress)
       .get(
-        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace"
+        baseURL + "/randomQuestion?gameId=" + gameIdCreated + "&theme=Espace",
       )
       .end((err, res) => {
         res.should.be.a("object");
@@ -443,7 +443,7 @@ describe("GET /answer", () => {
         res.body.message.should.be.eql("Answer retrieved");
         res.body.answer.should.be.eql("384400");
         res.body.explanation.should.be.eql(
-          "La lune se trouve à 384400 km de la terre"
+          "La lune se trouve à 384400 km de la terre",
         );
         res.body.choices.should.be.eql("");
         res.body.points.should.be.eql(1);
@@ -503,7 +503,7 @@ describe("GET /questionImage", () => {
   it("should return the image", (done) => {
     chai
       .request(serverAddress)
-      .get(baseURL + "/questionImage?imageName=example.jpg")
+      .get(baseURL + "/questionImage?imageName=prague.jpg")
       .end((err, res) => {
         res.should.have.status(200);
         res.should.have.header("content-type", "image/jpeg");
@@ -790,7 +790,7 @@ describe("POST /questionJSON", () => {
         res.should.be.a("object");
         res.body.should.have.property("error");
         res.body.error.should.eql(
-          "Choices cannot be empty if the question type is multiple choice"
+          "Choices cannot be empty if the question type is multiple choice",
         );
         done();
       });
@@ -814,7 +814,7 @@ describe("POST /questionJSON", () => {
         res.should.be.a("object");
         res.body.should.have.property("error");
         res.body.error.should.eql(
-          "Must be at least 2 choices if the question type is multiple choice"
+          "Must be at least 2 choices if the question type is multiple choice",
         );
         done();
       });
