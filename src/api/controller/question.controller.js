@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
+const crypto = require("crypto");
 
 const database = require("../../database.js");
 const Question = require("../model/Question.js");
@@ -384,9 +385,9 @@ exports.getRandomThemes = (req, res) => {
           res.status(400).send({ error: "No game found with this id" });
           return;
         } else {
-          //Getting all the themes that have at least 3 questions not asked for this game
+          //Getting all the themes that have at least 3 questions not asked for this game along with their unasked questions count
           pool.query(
-            "SELECT theme FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
+            "SELECT theme, COUNT(*) AS question_count FROM Questions WHERE game_id = ? AND is_asked = false GROUP BY theme HAVING COUNT(*) >= 3",
             [dataReceived.gameId],
             (error, results) => {
               if (error) {
@@ -400,25 +401,27 @@ exports.getRandomThemes = (req, res) => {
                   themes: [],
                 });
                 return;
-              } else if (results.length < numberOfRandomThemes) {
-                //If there are less themes than the number of random themes we want, we return all the themes left
-                let themes = [];
-                results.forEach((result) => {
-                  themes.push(result.theme);
-                });
+              } else if (results.length <= numberOfRandomThemes) {
+                //If there are fewer or equal themes than the number of random themes we want, return all of them
+                let themes = results.map((result) => result.theme);
                 res.send({
                   message: "Themes randomly selected",
                   themes: themes,
                 });
               } else {
-                let randomThemes = [];
+                // Softened weighted random selection without replacement (A-Res algorithm with w = sqrt(count))
+                // Gives a slight boost to themes with more remaining questions
+                const weightedThemes = results.map((result) => {
+                  const weight = Math.sqrt(result.question_count);
+                  const randomFloat = crypto.randomInt(1, 10000000) / 10000000;
+                  const key = Math.pow(randomFloat, 1 / weight);
+                  return { theme: result.theme, key };
+                });
 
-                //Getting random themes
-                for (let i = 0; i < numberOfRandomThemes; i++) {
-                  let randomIndex = Math.floor(Math.random() * results.length);
-                  randomThemes.push(results[randomIndex].theme);
-                  results.splice(randomIndex, 1);
-                }
+                weightedThemes.sort((a, b) => b.key - a.key);
+                const randomThemes = weightedThemes
+                  .slice(0, numberOfRandomThemes)
+                  .map((item) => item.theme);
 
                 res.send({
                   message: "Themes randomly selected",
@@ -457,7 +460,6 @@ exports.getRandomQuestionByTheme = (req, res) => {
     return;
   }
 
-  //TODO - Depending on the bonus, we need to know if we return the bonus question or not (TBD)
   //Selecting a random question for the theme and the game that is not yet asked
   pool.query(
     "SELECT * FROM Questions WHERE game_id = ? AND theme = ? AND is_asked = false",
